@@ -60,16 +60,9 @@ public class Main {
 				out = new FileOutputStream(new File(_outFile));
 			}
 			Controller ctrl = new Controller();
-			ctrl.loadDeck(br); //Se carga el mazo
-			ctrl.run();
+			ctrl.loadDeck2(br); //Se carga el mazo
+			ctrl.run2();
 			
-			//String in
-			//Scanner inConsola = new Scanner(System.in);
-			
-			//printFile(out);
-			//loadFile(in);			
-			//in.close();
-			//out.flush();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

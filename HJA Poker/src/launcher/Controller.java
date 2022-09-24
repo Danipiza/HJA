@@ -12,13 +12,23 @@ import java.util.Map.Entry;
 
 public class Controller {
 	
-	private List<Carta> cardList;
+	private List<Carta> myCards;
+	private List<List<Carta>> playerCards;
+	
+	private List<Carta> myOmahaCards;
+	private List<Carta> OmahaCommonCards;
+	
+	private Boolean drawFlush;
+	private int drawStraight;
 	
 	public Controller() {
-		cardList = new ArrayList<Carta>();
+		drawFlush = false;
+		drawStraight = 0;
+		myCards = new ArrayList<Carta>();
+		playerCards = new ArrayList<List<Carta>>();
 	}
 	
-	public void run() {			
+	public int handValue(List<Carta> hand) {
 		HashMap<Character, Integer> suitMap = new HashMap<Character, Integer>();
 
 		suitMap.put('s', 0);
@@ -26,8 +36,8 @@ public class Controller {
 		suitMap.put('d', 0);
 		suitMap.put('c', 0);
 		
-		for (int i = 0; i < cardList.size(); i++) {
-			char aux = cardList.get(i).getSuit();
+		for (int i = 0; i < 5; i++) {
+			char aux = hand.get(i).getSuit();
 			suitMap.put(aux, suitMap.get(aux) + 1);
 		}
 
@@ -41,49 +51,37 @@ public class Controller {
 				}
 		 }
 	 	
-	 	System.out.println("PalosIguales: " + paloRepetido + " " + maxPalos + '\n');
+	 	//System.out.println("PalosIguales: " + paloRepetido + " " + maxPalos + '\n');
 	 	
-	 	int valoresConsecutivos = 0, maxValoresConsecutivos = 0, valoresGutshot = 0, maxvaloresGutshot = 0;
-		boolean draw = false;
-		for (int i = 0; i < cardList.size() - 1 && valoresConsecutivos != 4; i++){
-			if (cardList.get(i).getValue() == cardList.get(i+1).getValue() + 1) {
-				valoresConsecutivos++;
-				valoresGutshot++;
-			}
-			else if (cardList.get(i).getValue() == cardList.get(i+1).getValue() + 2) {
-				if (draw)
-					valoresGutshot = valoresConsecutivos;
-				else
-					draw = true;
-				
-				valoresGutshot++;
-				maxValoresConsecutivos = Math.max(maxValoresConsecutivos, valoresConsecutivos);
-				valoresConsecutivos = 0;
-			}
-			else if (cardList.get(i).getValue() > cardList.get(i+1).getValue() + 2){
-				maxValoresConsecutivos = Math.max(maxValoresConsecutivos, valoresConsecutivos);
-				maxvaloresGutshot = Math.max(maxvaloresGutshot, valoresGutshot);
-				valoresGutshot = 0;
-				valoresConsecutivos = 0;
-				draw = false;
-			}
-		}
-		maxValoresConsecutivos = Math.max(maxValoresConsecutivos, valoresConsecutivos);
-		maxvaloresGutshot = Math.max(maxvaloresGutshot, valoresGutshot);
-		
-	 	// if (valoresConsecutivos >= 4) System.out.println("Straight");
-	 	// if (valoresConsecutivos == 4 && Draw) System.out.println("Straight Gutshot");
-		// if (valoresConsecutivos == 3) System.out.println("Straight open-ended");
-	 	
-	 	System.out.println("ValoresConsecutivos: " + maxValoresConsecutivos + " " + "ValoresGutshotConsecutivos: " + maxvaloresGutshot + '\n');
+		 int valoresConsecutivo = 1;
+	     Boolean gutShot = false;
+
+	        for(int i = 1; i < hand.size(); ++i) {
+	            if(hand.get(i).getValue() == hand.get(i-1).getValue()-1)
+	            	valoresConsecutivo++;
+	            else if(hand.get(i).getValue() == hand.get(i-1).getValue() - 2) {
+	                if(!gutShot) gutShot = true;
+	                else if(gutShot && valoresConsecutivo < 3) valoresConsecutivo = 1;
+	            }
+	            else if(hand.get(i).getValue() == hand.get(i-1).getValue()) {
+	                // NADA
+	            }
+	            else {
+	                valoresConsecutivo = 1;
+	                gutShot = false;
+	            }
+	        }
+
+			 	
+	 	//System.out.println("ValoresConsecutivos: " + maxValoresConsecutivos + " " + "ValoresGutshotConsecutivos: " + valoresGutshot + '\n');
 		
 		int cont = 0;
 		int parejas = 0;
 		int trios = 0;
 		int poker = 0;
 		
-		for (int i = 0; i < cardList.size() - 1; i++){
-			if (cardList.get(i).getValue() == cardList.get(i+1).getValue())
+		for (int i = 0; i < hand.size() - 1; i++){
+			if (hand.get(i).getValue() == hand.get(i+1).getValue())
 				cont++;
 			else{
 				if (cont == 1) parejas++;
@@ -97,56 +95,208 @@ public class Controller {
 		else if (cont == 2) trios++;
 		else if (cont == 3) poker++;
 		
-		System.out.println("Parejas: " + parejas);
-		System.out.println("Trios: " + trios);
-		System.out.println("Poker: " + poker);
+
 		
-		if(maxPalos >= 5 && maxValoresConsecutivos >= 4 && cardList.get(0).getValue() == 14) 
-			System.out.println("Royal Flush");	
-		else if(maxPalos >= 5 && maxValoresConsecutivos >= 4) 
-			System.out.println("Straight Flush");	
-		else if(poker > 0) 
-			System.out.println("Poker");
-		else if(trios > 0 && parejas > 0) 
-			System.out.println("Full House");
-		else if(maxPalos >= 5) 
-			System.out.println("Flush");
-		else if(maxValoresConsecutivos >= 4) 
-			System.out.println("Straight");
-		else if(trios > 0) 
-			System.out.println("Trio");
-		else if(parejas > 1) 
-			System.out.println("Double Pair");
-		else if(parejas > 0) 
-			System.out.println("Pair");
+		int ret;
+		
+		if(maxPalos == 5 && valoresConsecutivo == 4) 
+			ret = 9;	
+		else if(poker == 1) 
+			ret = 8;
+		else if(trios == 1 && parejas == 1) 
+			ret = 7;
+		else if(maxPalos == 5) 
+			ret = 6;
+		else if(valoresConsecutivo == 4) 
+			ret = 5;
+		else if(trios == 1) 
+			ret = 4;
+		else if(parejas == 2) 
+			ret = 3;
+		else if(parejas == 1) 
+			ret = 2;
 		else 
-			System.out.println("High Card");
+			ret = 1;
 		
-		// DRAW:
-		/*if(trios > 0) System.out.println("Draw, Poker");
-		else if(trios > 0 || (trios > 0 && parejas > 0)) System.out.println("Draw, Full House");
-		else if(parejas > 0) {
-			System.out.println("Draw, Trio");	
-			System.out.println("Draw, Double Pair");
+		
+		if (maxPalos == 4 && drawFlush == false)
+			drawFlush = true;
+		if (drawStraight == 0) {
+	        if(valoresConsecutivo >= 3 && gutShot) drawStraight = 1;
+	        else if(valoresConsecutivo == 4) drawStraight = 2;
 		}
-		*/
-		//else if(!pair && !poker) System.out.println("Draw, Pair");
-		
+        
+			
+		return ret;
 	}
 	
-	
-	private static void parseArgs(String[] args) {
+	public int CardListValue(List<Carta> cardList) {	
+		int aux, help = 1;
+		Boolean drawFlushAux = false;
+		int drawStraightAux = 0, maxValue = 0;
 		
+		
+			if (cardList.size() == 7) {
+				List<Carta> hand = new ArrayList<Carta>();
+				for (int i = 6; i >= 0; i--) {
+					for (int j = i - 1; j >= 0; j--) {
+						for (int x = 0; x < 7; x++) {
+							if (x != i && x != j) {
+								hand.add(cardList.get(x));
+							}
+							
+						}
+						aux = handValue(hand);
+						System.out.print(help + " ---> " + i + " " + j + " ");
+						help++;
+						System.out.println (aux);
+						hand.clear();
+						if (aux > maxValue) maxValue = aux;					
+						
+					}
+				}
+			}
+			else if (cardList.size() == 6) {
+				List<Carta> hand = new ArrayList<Carta>();
+				for (int i = 5; i >= 0; i--) {
+					for (int x = 0; x < 6; x++) {
+						if (x != i) {
+							hand.add(cardList.get(x));
+							
+						}
+					}
+					aux = handValue(hand);
+					System.out.print(help + " ---> " + i + " ");
+					help++;
+					System.out.println (aux);
+					hand.clear();
+					if (aux > maxValue) maxValue = aux;
+				}
+			}
+			else {
+				aux = handValue(cardList);
+				System.out.println (aux);
+				if (aux > maxValue) maxValue = aux;
+				if (drawStraightAux > 0) drawStraight = drawStraightAux;
+				if (drawFlushAux == true) drawFlush = drawFlushAux;
+			}
+			
+			System.out.println ("Best Hand: " + maxValue);
+			if (drawStraight == 1)
+				System.out.println ("Draw: Gutshot Straight");
+			else if (drawStraight == 2)
+				System.out.println ("Draw: Open-ended Straight");	
+			if (drawFlush)
+				System.out.println ("Draw: Flush");
+			
+			
+			return maxValue;
+			
 	}
 	
-	public void loadDeck(BufferedReader in) throws Exception {
+		
+	public void loadDeck1(BufferedReader in) throws Exception {
 		int value;
 		char suit = ' '; 
-			while ((value = in.read()) != -1) {
+		while ((value = in.read()) != -1) {
+			suit = (char) in.read();
+			Carta c = new Carta(suit, value);
+			myCards.add(c);
+		}
+	}
+	
+	public void run1() {
+		CardListValue(myCards);		
+	}
+	
+	public void loadDeck2(BufferedReader in) throws Exception {
+		int value, commonCards;
+		char suit = ' ';
+		for (int i = 0; i < 2; i++) {
+			value = in.read();
+			suit = (char) in.read();
+			Carta c = new Carta(suit, value);
+			myCards.add(c);
+		}
+		in.read(); commonCards = in.read() - 48; in.read();
+		for (int i = 0; i < commonCards; i++) {
+			value = in.read();
+			suit = (char) in.read();
+			Carta c = new Carta(suit, value);
+			myCards.add(c);
+		}
+	}
+	
+	public void run2() {
+		CardListValue(myCards);		
+	}
+	
+	public void loadDeck3(BufferedReader in) throws Exception {
+		int value, players;
+		char suit = ' '; 
+		players = (int) in.read();
+		for (int i = 0; i < players; i++) {
+			List<Carta> newPlayer = new ArrayList<Carta>();
+			in.read(); in.read(); in.read();
+			for (int j = 0; j < 2; j++) {
+				value = in.read();
 				suit = (char) in.read();
 				Carta c = new Carta(suit, value);
-				cardList.add(c);
+				newPlayer.add(c);
 			}
+			playerCards.add(newPlayer);
+		}
+		List<Carta> commonCards = new ArrayList<Carta>();
+		while ((value = in.read()) != -1) {
+			suit = (char) in.read();
+			Carta c = new Carta(suit, value);
+			commonCards.add(c);
+		}
+		
+		for (List<Carta> player : playerCards) {
+			player.addAll(commonCards);
+		}
+		
+		
+	}
+	
+	public void run3() {
+		List<Integer> playerValues = new ArrayList<Integer>();
+		for (List<Carta> player : playerCards) {
+			playerValues.add(CardListValue(player));
+		}
+		while (!playerValues.isEmpty()) {
+			int max = 0, index = 0;
+			for (int i = 0; i < playerValues.size(); i++) {
+				 if (playerValues.get(i) > max) {
+						max = playerValues.get(i);
+						index = i;
+				}
+			}
+			System.out.println("J" + (index + 1) + ": ");
+			playerValues.remove(index);
+			playerCards.remove(index);
+			
+		}		
+		
+	}
+	
+	public void loadDeck4(BufferedReader in) throws Exception {
+		int value, commonCards;
+		char suit = ' '; 
+		for (int i = 0; i < 4; i++){
+			value = in.read();
+			suit = (char) in.read();
+			Carta c = new Carta(suit, value);
+			myOmahaCards.add(c);
+		}
+		in.read(); commonCards = (int) in.read(); in.read();
+		for (int i = 0; i < commonCards; i++){
+			value = in.read();
+			suit = (char) in.read();
+			Carta c = new Carta(suit, value);
+			OmahaCommonCards.add(c);
+		}
 	}
 	
 	private void cardSorting(List<Carta> cardList) {
