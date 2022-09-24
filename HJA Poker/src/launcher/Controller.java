@@ -234,7 +234,7 @@ public class Controller {
 	public void loadDeck3(BufferedReader in) throws Exception {
 		int value, players;
 		char suit = ' '; 
-		players = (int) in.read();
+		players = in.read() - 48;
 		for (int i = 0; i < players; i++) {
 			List<Carta> newPlayer = new ArrayList<Carta>();
 			in.read(); in.read(); in.read();
@@ -247,6 +247,7 @@ public class Controller {
 			playerCards.add(newPlayer);
 		}
 		List<Carta> commonCards = new ArrayList<Carta>();
+		value = in.read();
 		while ((value = in.read()) != -1) {
 			suit = (char) in.read();
 			Carta c = new Carta(suit, value);
@@ -313,6 +314,27 @@ public class Controller {
 			return 1;
 		}
 	}
+
+	/*
+	int translateCard(int value) {
+		int ret = value;
+		if((char)value == 'A')
+			ret = 14;
+		else if((char)value == 'K')
+			ret = 13;
+		else if((char)value == 'Q')
+			ret = 12;
+		else if((char)value == 'J')
+			ret = 11;
+		else if((char)value == 'T')
+			ret = 10;
+		else
+			ret = value - 48;
+		
+		return ret;
+	}
+
+	 */
 
 }
 
