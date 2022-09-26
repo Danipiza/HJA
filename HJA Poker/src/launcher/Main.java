@@ -6,9 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 
 public class Main {
 
@@ -17,51 +15,14 @@ public class Main {
 	private int apartado = 0; //A leer
 	
 	
-	
-	
-	public static void loadFile(InputStream in) {
-	
-		
-		
-		
-		
-		
-	}
-	
-	public static void printFile(OutputStream out) {
-		if(out == null) {
-			out = new OutputStream() {
-				public void write (int b) throws IOException{
-				};
-			};
-		}
-		
-		PrintStream p = new PrintStream(out);
-		
-		p.println(" - Best hand: ");
-		p.println(" - Draw: ");
-		
-			
-		
-		
-		p.close();
-	}
-	
 	public static void main(String[] args) throws IOException {
 	
 		try {
-			//TODO Se usa commons cli para leer el apartado el nombre del archivo de salida y el de entrada
-			BufferedReader br = new BufferedReader(new FileReader(new File(_inFile))); // FICHERO DE LECTURA
-			OutputStream out; // FICHERO DE ESCRITURA
 			
-			if (_outFile == null) {
-				out = System.out;
-			} else	{
-				out = new FileOutputStream(new File(_outFile));
-			}
+			BufferedReader br = new BufferedReader(new FileReader(new File(_inFile))); // FICHERO DE LECTURA
 			Controller ctrl = new Controller();
-			ctrl.loadDeck2(br); //Se carga el mazo
-			ctrl.run2();
+			ctrl.loadDeck3(br); //Se carga el mazo
+			ctrl.run3();
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

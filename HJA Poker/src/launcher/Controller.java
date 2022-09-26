@@ -1,340 +1,240 @@
 package launcher;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 
 public class Controller {
 	
-	private List<Carta> myCards;
-	private List<List<Carta>> playerCards;
+	private String input;
 	
-	private List<Carta> myOmahaCards;
-	private List<Carta> OmahaCommonCards;
+	private Player me;
+	private List<Player> players;
 	
-	private Boolean drawFlush;
-	private int drawStraight;
+	private static String _outFile = null;
 	
 	public Controller() {
-		drawFlush = false;
-		drawStraight = 0;
-		myCards = new ArrayList<Carta>();
-		playerCards = new ArrayList<List<Carta>>();
+		input = "";
+		me = new Player();
+		players = new ArrayList<Player>();
+
 	}
-	
-	public int handValue(List<Carta> hand) {
-		HashMap<Character, Integer> suitMap = new HashMap<Character, Integer>();
-
-		suitMap.put('s', 0);
-		suitMap.put('h', 0);
-		suitMap.put('d', 0);
-		suitMap.put('c', 0);
-		
-		for (int i = 0; i < 5; i++) {
-			char aux = hand.get(i).getSuit();
-			suitMap.put(aux, suitMap.get(aux) + 1);
-		}
-
-		
-		int maxPalos = 0;
-		char paloRepetido = '_';
-		 for (Entry<Character, Integer> e : suitMap.entrySet()) {
-			 if (maxPalos < e.getValue()) {
-					paloRepetido = e.getKey();
-					maxPalos = e.getValue();
-				}
-		 }
-	 	
-	 	//System.out.println("PalosIguales: " + paloRepetido + " " + maxPalos + '\n');
-	 	
-		 int valoresConsecutivo = 1;
-	     Boolean gutShot = false;
-
-	        for(int i = 1; i < hand.size(); ++i) {
-	            if(hand.get(i).getValue() == hand.get(i-1).getValue()-1)
-	            	valoresConsecutivo++;
-	            else if(hand.get(i).getValue() == hand.get(i-1).getValue() - 2) {
-	                if(!gutShot) gutShot = true;
-	                else if(gutShot && valoresConsecutivo < 3) valoresConsecutivo = 1;
-	            }
-	            else if(hand.get(i).getValue() == hand.get(i-1).getValue()) {
-	                // NADA
-	            }
-	            else {
-	                valoresConsecutivo = 1;
-	                gutShot = false;
-	            }
-	        }
-
-			 	
-	 	//System.out.println("ValoresConsecutivos: " + maxValoresConsecutivos + " " + "ValoresGutshotConsecutivos: " + valoresGutshot + '\n');
-		
-		int cont = 0;
-		int parejas = 0;
-		int trios = 0;
-		int poker = 0;
-		
-		for (int i = 0; i < hand.size() - 1; i++){
-			if (hand.get(i).getValue() == hand.get(i+1).getValue())
-				cont++;
-			else{
-				if (cont == 1) parejas++;
-				else if (cont == 2) trios++;
-				else if (cont == 3) poker++;
-				cont = 0;
-			}
-		}
-		
-		if (cont == 1) parejas++;
-		else if (cont == 2) trios++;
-		else if (cont == 3) poker++;
-		
-
-		
-		int ret;
-		
-		if(maxPalos == 5 && valoresConsecutivo == 4) 
-			ret = 9;	
-		else if(poker == 1) 
-			ret = 8;
-		else if(trios == 1 && parejas == 1) 
-			ret = 7;
-		else if(maxPalos == 5) 
-			ret = 6;
-		else if(valoresConsecutivo == 4) 
-			ret = 5;
-		else if(trios == 1) 
-			ret = 4;
-		else if(parejas == 2) 
-			ret = 3;
-		else if(parejas == 1) 
-			ret = 2;
-		else 
-			ret = 1;
-		
-		
-		if (maxPalos == 4 && drawFlush == false)
-			drawFlush = true;
-		if (drawStraight == 0) {
-	        if(valoresConsecutivo >= 3 && gutShot) drawStraight = 1;
-	        else if(valoresConsecutivo == 4) drawStraight = 2;
-		}
-        
-			
-		return ret;
-	}
-	
-	public int CardListValue(List<Carta> cardList) {	
-		int aux, help = 1;
-		Boolean drawFlushAux = false;
-		int drawStraightAux = 0, maxValue = 0;
-		
-		
-			if (cardList.size() == 7) {
-				List<Carta> hand = new ArrayList<Carta>();
-				for (int i = 6; i >= 0; i--) {
-					for (int j = i - 1; j >= 0; j--) {
-						for (int x = 0; x < 7; x++) {
-							if (x != i && x != j) {
-								hand.add(cardList.get(x));
-							}
-							
-						}
-						aux = handValue(hand);
-						System.out.print(help + " ---> " + i + " " + j + " ");
-						help++;
-						System.out.println (aux);
-						hand.clear();
-						if (aux > maxValue) maxValue = aux;					
-						
-					}
-				}
-			}
-			else if (cardList.size() == 6) {
-				List<Carta> hand = new ArrayList<Carta>();
-				for (int i = 5; i >= 0; i--) {
-					for (int x = 0; x < 6; x++) {
-						if (x != i) {
-							hand.add(cardList.get(x));
-							
-						}
-					}
-					aux = handValue(hand);
-					System.out.print(help + " ---> " + i + " ");
-					help++;
-					System.out.println (aux);
-					hand.clear();
-					if (aux > maxValue) maxValue = aux;
-				}
-			}
-			else {
-				aux = handValue(cardList);
-				System.out.println (aux);
-				if (aux > maxValue) maxValue = aux;
-				if (drawStraightAux > 0) drawStraight = drawStraightAux;
-				if (drawFlushAux == true) drawFlush = drawFlushAux;
-			}
-			
-			System.out.println ("Best Hand: " + maxValue);
-			if (drawStraight == 1)
-				System.out.println ("Draw: Gutshot Straight");
-			else if (drawStraight == 2)
-				System.out.println ("Draw: Open-ended Straight");	
-			if (drawFlush)
-				System.out.println ("Draw: Flush");
-			
-			
-			return maxValue;
-			
-	}
-	
 		
 	public void loadDeck1(BufferedReader in) throws Exception {
-		int value;
-		char suit = ' '; 
-		while ((value = in.read()) != -1) {
+		int aux;
+		char value, suit = ' '; 
+		while ((aux = in.read()) != -1) {
+			value = (char) aux;
 			suit = (char) in.read();
-			Carta c = new Carta(suit, value);
-			myCards.add(c);
+			input += value;
+			input += suit;
+			Card c = new Card(suit, value);
+			me.addCard(c);
 		}
 	}
 	
-	public void run1() {
-		CardListValue(myCards);		
+	public void run1() throws FileNotFoundException {
+		me.CardsValue();
+		String output = input + '\n';
+		output += " - Best hand: " + me.getHandName() + " with " + me.getBestHand() + '\n';
+		
+		if (me.getDrawStraight() == 1 && me.getMaxValue() < 5)
+			output += " - Draw: Straight Gutshot" + '\n';
+		else if (me.getDrawStraight() == 2 && me.getMaxValue() < 5)
+			output += " - Draw: Open-ended Straight" + '\n';	
+		if (me.getDrawFlush() && me.getMaxValue() < 6)
+			output += " - Draw: Flush";
+		
+		_outFile = "salida1.txt";
+		
+		print(output);
 	}
+	
 	
 	public void loadDeck2(BufferedReader in) throws Exception {
-		int value, commonCards;
-		char suit = ' ';
+		int commonCards;
+		char value, suit = ' ';
 		for (int i = 0; i < 2; i++) {
-			value = in.read();
+			value = (char) in.read();
 			suit = (char) in.read();
-			Carta c = new Carta(suit, value);
-			myCards.add(c);
+			input += value;
+			input += suit;
+			Card c = new Card(suit, value);
+			me.addCard(c);
 		}
-		in.read(); commonCards = in.read() - 48; in.read();
+		in.read(); commonCards = in.read(); in.read();
+		input += ';'; input += (char) commonCards; input += ';';
+		commonCards -= 48;
 		for (int i = 0; i < commonCards; i++) {
-			value = in.read();
+			value = (char) in.read();
 			suit = (char) in.read();
-			Carta c = new Carta(suit, value);
-			myCards.add(c);
+			input += value;
+			input += suit;
+			Card c = new Card(suit, value);
+			me.addCard(c);
 		}
 	}
 	
-	public void run2() {
-		CardListValue(myCards);		
+	public void run2() throws FileNotFoundException {
+		me.CardsValue();
+		String output = input + '\n';
+		output += " - Best hand: " + me.getHandName() + " with " + me.getBestHand() + '\n';
+		
+		if (me.getDrawStraight() == 1 && me.getMaxValue() < 5)
+			output += " - Draw: Straight Gutshot" + '\n';
+		else if (me.getDrawStraight() == 2 && me.getMaxValue() < 5)
+			output += " - Draw: Open-ended Straight" + '\n';	
+		if (me.getDrawFlush() && me.getMaxValue() < 6)
+			output += " - Draw: Flush";
+		
+		_outFile = "salida2.txt";
+		
+		print(output);
 	}
+	
 	
 	public void loadDeck3(BufferedReader in) throws Exception {
-		int value, players;
-		char suit = ' '; 
-		players = in.read() - 48;
-		for (int i = 0; i < players; i++) {
-			List<Carta> newPlayer = new ArrayList<Carta>();
-			in.read(); in.read(); in.read();
+		int numPlayers, aux;
+		char value, suit = ' '; 
+		numPlayers = in.read();
+		input += (char) numPlayers;
+		numPlayers -= 48;
+		for (int i = 0; i < numPlayers; i++) {
+			Player newPlayer = new Player();
+			input +=  (char) in.read(); input += (char) in.read(); input += (char) in.read();
 			for (int j = 0; j < 2; j++) {
-				value = in.read();
+				value = (char) in.read();
 				suit = (char) in.read();
-				Carta c = new Carta(suit, value);
-				newPlayer.add(c);
+				input += value;
+				input += suit;
+				Card c = new Card(suit, value);
+				newPlayer.addCard(c);
 			}
-			playerCards.add(newPlayer);
+			newPlayer.setPlayerNum(i + 1);
+			players.add(newPlayer);
 		}
-		List<Carta> commonCards = new ArrayList<Carta>();
-		value = in.read();
-		while ((value = in.read()) != -1) {
+		input +=  (char) in.read();
+		List<Card> commonCards = new ArrayList<Card>();
+		for (int i = 0; i < 5; i++) {
+			value = (char) in.read();
 			suit = (char) in.read();
-			Carta c = new Carta(suit, value);
+			input += value;
+			input += suit;
+			Card c = new Card(suit, value);
 			commonCards.add(c);
 		}
 		
-		for (List<Carta> player : playerCards) {
-			player.addAll(commonCards);
+		for (Player player : players) {
+			player.addCards(commonCards);
 		}
 		
 		
 	}
 	
-	public void run3() {
-		List<Integer> playerValues = new ArrayList<Integer>();
-		for (List<Carta> player : playerCards) {
-			playerValues.add(CardListValue(player));
+	public void run3() throws FileNotFoundException {
+		for (Player p : players) {
+			p.CardsValue();
 		}
-		while (!playerValues.isEmpty()) {
-			int max = 0, index = 0;
-			for (int i = 0; i < playerValues.size(); i++) {
-				 if (playerValues.get(i) > max) {
-						max = playerValues.get(i);
-						index = i;
+		playerSorting(players);
+		
+		String output = input + '\n';
+		for (Player p : players) {
+			output += "J" + p.getPlayerNum() + ": " + p.getBestHand() + " (" + p.getHandName() + ")" + '\n';
+		}
+		
+		_outFile = "salida3.txt";
+		
+		print (output);
+	}	
+	
+	private void playerSorting(List<Player> playerList) {
+		Collections.sort(playerList, new SortPlayers());
+	}
+	class SortPlayers implements Comparator<Player>{
+		@Override
+		public int compare(Player p1, Player p2) {
+			int ret = 0;
+			if (p1.getMaxValue() > p2.getMaxValue()) ret = -1;
+			else if (p1.getMaxValue() < p2.getMaxValue()) ret = 1;
+			else {
+				if (p1.getTieBreaker1() > p2.getTieBreaker1()) ret = -1;
+				else if (p1.getTieBreaker1() < p2.getTieBreaker1()) ret = 1;
+				else {
+					if (p1.getTieBreaker2() > p2.getTieBreaker2()) ret = -1;
+					else if (p1.getTieBreaker2() < p2.getTieBreaker2()) ret = 1;
+					else {
+						int i = 0;
+						while (i < 5 && ret == 0) {
+							if (p1.symbolValue(p1.getBestHand().charAt(2*i)) > 
+							p2.symbolValue(p2.getBestHand().charAt(2*i))) ret = -1;
+							else if (p1.symbolValue(p1.getBestHand().charAt(2*i)) < 
+							p2.symbolValue(p2.getBestHand().charAt(2*i))) ret = 1;
+							i++;
+						}
+					}
 				}
-			}
-			System.out.println("J" + (index + 1) + ": ");
-			playerValues.remove(index);
-			playerCards.remove(index);
-			
-		}		
+			}	
+			return ret;
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	public void print(String output) throws FileNotFoundException {
+		OutputStream out = new FileOutputStream(_outFile);
+		
+		if (out == null) {
+			out = new OutputStream() {
+				public void write (int b) throws IOException{
+				};
+			};
+		}
+		
+		PrintStream p = new PrintStream(out);
+		p.println(output);
+		p.close();
 		
 	}
 	
+	/*
 	public void loadDeck4(BufferedReader in) throws Exception {
-		int value, commonCards;
-		char suit = ' '; 
+		int commonCards;
+		char value, suit = ' '; 
 		for (int i = 0; i < 4; i++){
-			value = in.read();
+			value = (char) in.read();
 			suit = (char) in.read();
-			Carta c = new Carta(suit, value);
+			Card c = new Card(suit, value);
 			myOmahaCards.add(c);
 		}
 		in.read(); commonCards = (int) in.read(); in.read();
 		for (int i = 0; i < commonCards; i++){
-			value = in.read();
+			value = (char) in.read();
 			suit = (char) in.read();
-			Carta c = new Carta(suit, value);
+			Card c = new Card(suit, value);
 			OmahaCommonCards.add(c);
 		}
 	}
+	*/
 	
-	private void cardSorting(List<Carta> cardList) {
-		Collections.sort(cardList, new SortLocation());
-	}
-
-	class SortLocation implements Comparator<Carta>{
-		@Override
-		public int compare(Carta c1, Carta c2) {
-			if (c1.getValue() > c2.getValue())
-				return -1;
-			else if (c1.getValue() == c2.getValue())
-				return 0;
-			return 1;
-		}
-	}
-
-	/*
-	int translateCard(int value) {
-		int ret = value;
-		if((char)value == 'A')
-			ret = 14;
-		else if((char)value == 'K')
-			ret = 13;
-		else if((char)value == 'Q')
-			ret = 12;
-		else if((char)value == 'J')
-			ret = 11;
-		else if((char)value == 'T')
-			ret = 10;
-		else
-			ret = value - 48;
-		
-		return ret;
-	}
-
-	 */
-
+	/*System.out.println(input);
+	System.out.println (" - Best hand: " + me.getHandName() + " with " + me.getBestHand());
+		if (me.getDrawStraight() == 1 && me.getMaxValue() < 5)
+			System.out.println (" - Draw: Straight Gutshot");
+		else if (me.getDrawStraight() == 2 && me.getMaxValue() < 5)
+			System.out.println (" - Draw: Open-ended Straight");	
+		if (me.getDrawFlush() && me.getMaxValue() < 6)
+			System.out.println (" - Draw: Flush");
+	*/	
+	
 }
+
+
+
 
