@@ -1,9 +1,6 @@
 Queda por hacer:
+Arreglar funcion straight,
 As vale 2,
-Ordenar la entrada,
-Salida,
-practica 3 ordernar resultados,
-hacer pruebas,
 omaha,
-Interfaz grafica
-Multiples entradas
+Interfaz grafica,
+si no ( Multiples entradas, multiples archivos entrada)
