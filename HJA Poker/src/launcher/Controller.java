@@ -155,9 +155,53 @@ public class Controller {
 		print (output);
 	}	
 	
+	public void loadDeck4(BufferedReader in) throws Exception {
+		int commonCardsNumber;
+		char value, suit = ' ';
+		for (int i = 0; i < 4; i++) {
+			value = (char) in.read();
+			suit = (char) in.read();
+			input += value;
+			input += suit;
+			Card c = new Card(suit, value);
+			me.addCard(c);
+		}
+		in.read(); commonCardsNumber = in.read(); in.read();
+		input += ';'; input += (char) commonCardsNumber; input += ';';
+		commonCardsNumber -= 48;
+		
+		for (int i = 0; i < commonCardsNumber; i++) {
+			value = (char) in.read();
+			suit = (char) in.read();
+			input += value;
+			input += suit;
+			Card c = new Card(suit, value);
+			me.addCommonOmahaCard(c);
+		}
+		
+	}
+	
+	public void run4() throws FileNotFoundException {
+		me.OmahaCardsValue();
+		String output = input + '\n';
+		output += " - Best hand: " + me.getHandName() + " with " + me.getBestHand() + '\n';
+		
+		if (me.getDrawStraight() == 1 && me.getMaxValue() < 5)
+			output += " - Draw: Straight Gutshot" + '\n';
+		else if (me.getDrawStraight() == 2 && me.getMaxValue() < 5)
+			output += " - Draw: Open-ended Straight" + '\n';	
+		if (me.getDrawFlush() && me.getMaxValue() < 6)
+			output += " - Draw: Flush";
+		
+		_outFile = "salida4.txt";
+		
+		print(output);
+	}
+	
 	private void playerSorting(List<Player> playerList) {
 		Collections.sort(playerList, new SortPlayers());
 	}
+	
 	class SortPlayers implements Comparator<Player>{
 		@Override
 		public int compare(Player p1, Player p2) {

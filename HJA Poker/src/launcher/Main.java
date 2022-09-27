@@ -21,8 +21,8 @@ public class Main {
 			
 			BufferedReader br = new BufferedReader(new FileReader(new File(_inFile))); // FICHERO DE LECTURA
 			Controller ctrl = new Controller();
-			ctrl.loadDeck3(br); //Se carga el mazo
-			ctrl.run3();
+			ctrl.loadDeck4(br); //Se carga el mazo
+			ctrl.run4();
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

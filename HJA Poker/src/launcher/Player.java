@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 public class Player {
 	
 	private List<Card> Cards;
+	private List<Card> OmahaCommonCards;
 	
 	private int playerNum;
 	private int maxValue;
@@ -28,6 +29,7 @@ public class Player {
 		tieBreaker2 = 0;
 		drawFlush = false;
 		Cards = new ArrayList<Card>();
+		OmahaCommonCards = new ArrayList<Card>();
 	}
 	
 	public void handValue(List<Card> hand) {
@@ -233,6 +235,55 @@ public class Player {
 			
 	}
 	
+	public void OmahaCardsValue() {
+		//En este punto this.Cards contiene la 4 cartas de mano Omaha. Hacemos conbinatoria
+		List<Card> hand = new ArrayList<Card>();
+		for(int i = 0; i < Cards.size(); i++) {
+			for(int j = 0; j < Cards.size(); j++) {
+				if(i != j) {
+					if(OmahaCommonCards.size() == 5) {
+						for (int k = 4; k >= 0; k--) {
+							for (int l = k - 1; l >= 0; l--) {
+								hand.add(Cards.get(i));
+								hand.add(Cards.get(j));
+								for (int x = 0; x < 5; x++) {
+									if (x != k && x != l) {
+										hand.add(OmahaCommonCards.get(x));
+									}	
+								}
+								cardSorting(Cards);
+								handValue(hand);
+								hand.clear();
+							}
+						}
+					}
+					else if(OmahaCommonCards.size() == 4) {
+						for (int k = 3; k >= 0; k--) {
+							hand.add(Cards.get(i));
+							hand.add(Cards.get(j));
+							for (int x = 0; x < 4; x++) {
+								if (x != k) {
+									hand.add(OmahaCommonCards.get(x));
+								}
+							}
+							cardSorting(Cards);
+							handValue(hand);
+							hand.clear();
+						}
+					}
+					else {
+						hand.add(Cards.get(i));
+						hand.add(Cards.get(j));
+						hand.addAll(OmahaCommonCards);
+						cardSorting(Cards);
+						handValue(hand);
+						hand.clear();
+					}
+				}
+			}
+		}	
+	}
+	
 	private void cardSorting(List<Card> cardList) {
 		Collections.sort(cardList, new SortLocation());
 	}
@@ -247,12 +298,21 @@ public class Player {
 			return 1;
 		}
 	}
+	
+	public void deleteCards() {
+		Cards.clear();
+	}
+	
 	public void addCard(Card c) {
 		Cards.add(c);
 	}
 	
 	public void addCards(List<Card> c) {
 		Cards.addAll(c);
+	}
+	
+	public void addCommonOmahaCard(Card c) {
+		OmahaCommonCards.add(c);
 	}
 	
 	public int getPlayerNum() {
