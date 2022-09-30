@@ -166,11 +166,11 @@ public class Player {
 				maxValue = 1; tieBreaker1 = hand.get(0).getValue(); tieBreaker2 = 0;
 				handName = "High card " + hand.get(0).getName(); bestHand = handToString(hand);
 			}
-		}
-		
+		}		
 		
 		if (maxPalos == 4 && drawFlush == false)
 			drawFlush = true;
+		
 		if (drawStraight == 0) {
 	        if(valoresConsecutivo >= 3 && gutShot) drawStraight = 1;
 	        else if(valoresConsecutivo == 4) drawStraight = 2;
@@ -236,7 +236,7 @@ public class Player {
 	}
 	
 	public void OmahaCardsValue() {
-		//En este punto this.Cards contiene la 4 cartas de mano Omaha. Hacemos conbinatoria
+		//En este punto this.Cards contiene la 4 cartas de mano Omaha. Hacemos conbinatoria.
 		List<Card> hand = new ArrayList<Card>();
 		for(int i = 0; i < Cards.size(); i++) {
 			for(int j = 0; j < Cards.size(); j++) {
@@ -251,7 +251,7 @@ public class Player {
 										hand.add(OmahaCommonCards.get(x));
 									}	
 								}
-								cardSorting(Cards);
+								cardSorting(hand);
 								handValue(hand);
 								hand.clear();
 							}
@@ -266,7 +266,7 @@ public class Player {
 									hand.add(OmahaCommonCards.get(x));
 								}
 							}
-							cardSorting(Cards);
+							cardSorting(hand);
 							handValue(hand);
 							hand.clear();
 						}
@@ -275,7 +275,7 @@ public class Player {
 						hand.add(Cards.get(i));
 						hand.add(Cards.get(j));
 						hand.addAll(OmahaCommonCards);
-						cardSorting(Cards);
+						cardSorting(hand);
 						handValue(hand);
 						hand.clear();
 					}

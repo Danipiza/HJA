@@ -19,7 +19,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 	
-		System.out.println(args[1]);
+		//System.out.println(args[1]);
 		_inFile = args[1];
 		if (args.length == 4) {
 			apartado = Integer.parseInt(args[0]);
@@ -52,8 +52,21 @@ public class Main {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(_inFile)));
 			Controller ctrl = new Controller();
-			ctrl.loadDeck4(br); //Se carga el mazo
-			ctrl.run4();
+			apartado = 1;
+			if(apartado == 1) {
+				ctrl.loadDeck1(br); //Se carga el mazo
+				ctrl.run1();
+			} else if(apartado == 2) {
+				ctrl.loadDeck2(br); //Se carga el mazo
+				ctrl.run2();				
+			} else if(apartado == 3) {
+				ctrl.loadDeck3(br); //Se carga el mazo
+				ctrl.run3();
+			} else if(apartado == 4) {
+				ctrl.loadDeck4(br); //Se carga el mazo
+				ctrl.run4();
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
