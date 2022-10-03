@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 
 import launcher.Controller;
 
@@ -32,6 +33,7 @@ public class MainWindow extends JFrame {
 	private JPanel panel;
 	private int _mode;
 	private BufferedReader is;
+	private JTextArea _text;
 	
 	public MainWindow(Controller ctrl, int mode, BufferedReader s) {
 		super("Poker");
@@ -45,14 +47,19 @@ public class MainWindow extends JFrame {
 	}
 	
 	private void initGUI() {
-		panel = new JPanel(new FlowLayout());
+		panel = new JPanel(new BorderLayout());
 		setContentPane(panel);
 		int frameWidth = 450;
 		int frameHeight = 300;
 		setSize(frameWidth,frameHeight);
 		setLocation(250, 20);
 		_btnFile = makeButtonFile();
-		_comboMode = makeComboBox(); 
+		_comboMode = makeComboBox();
+		_text = new JTextArea();
+		_text.setSize(panel.getWidth(), 100);
+		_text.setVisible(true);
+		panel.add(_text, BorderLayout.SOUTH);
+
 		
 
 	}
@@ -87,7 +94,7 @@ public class MainWindow extends JFrame {
 				}
 				fChooser.setEnabled(false);
 			}});
-		panel.add(button);
+		panel.add(button, BorderLayout.NORTH);
 		button.setVisible(true);
 		return button;
 	}
@@ -106,22 +113,18 @@ public class MainWindow extends JFrame {
 				
 			}
 		});
-		panel.add(aux);
+		panel.add(aux, BorderLayout.CENTER);
 		return aux;
 	}
 	
 	void chooseDeck() {
-		if (_mode == 1) {
-			
-		}
-		else if (_mode == 2) {
-			
-		}
 		
 		switch (_mode) {
 		case 1:
 			try {
 				_ctrl.loadDeck1(is);
+				
+				_text.setText((_ctrl.run1()));
 			} catch (Exception e) {
 				System.out.println("Modo o mazo equivocado");
 			}
@@ -129,6 +132,7 @@ public class MainWindow extends JFrame {
 		case 2:
 			try {
 				_ctrl.loadDeck2(is);
+				_text.setText((_ctrl.run2()));
 			} catch (Exception e) {
 				System.out.println("Modo o mazo equivocado");
 
@@ -137,6 +141,7 @@ public class MainWindow extends JFrame {
 		case 3:
 			try {
 				_ctrl.loadDeck3(is);
+				_ctrl.run3();
 			} catch (Exception e) {
 				System.out.println("Modo o mazo equivocado");
 
@@ -145,6 +150,7 @@ public class MainWindow extends JFrame {
 		case 4:
 			try {
 				_ctrl.loadDeck4(is);
+				_text.setText((_ctrl.run4()));
 			} catch (Exception e) {
 				System.out.println("Modo o mazo equivocado");
 
