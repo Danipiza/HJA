@@ -34,6 +34,7 @@ public class MainWindow extends JFrame {
 	private int _mode;
 	private BufferedReader is;
 	private JTextArea _text;
+	private JButton _start;
 	
 	public MainWindow(Controller ctrl, int mode, BufferedReader s) {
 		super("Poker");
@@ -55,6 +56,7 @@ public class MainWindow extends JFrame {
 		setLocation(250, 20);
 		_btnFile = makeButtonFile();
 		_comboMode = makeComboBox();
+		_start = makeButtonStart();
 		_text = new JTextArea();
 		_text.setSize(panel.getWidth(), 100);
 		_text.setVisible(true);
@@ -80,21 +82,26 @@ public class MainWindow extends JFrame {
 					File file = fChooser.getSelectedFile();
 					try {
 						is = new BufferedReader(new FileReader(file));
-						chooseDeck();
-						
 					} catch (FileNotFoundException e1) {
 						System.err.println("Error loading the file");
-					}
-					try {
-						is.close();
-					} catch (IOException e1) {
-						e1.printStackTrace();
 					}
 					
 				}
 				fChooser.setEnabled(false);
 			}});
 		panel.add(button, BorderLayout.NORTH);
+		button.setVisible(true);
+		return button;
+	}
+	
+	private JButton makeButtonStart() {
+		JButton button = new JButton("Start");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chooseDeck();
+			}});
+		panel.add(button, BorderLayout.EAST);
 		button.setVisible(true);
 		return button;
 	}
@@ -110,6 +117,7 @@ public class MainWindow extends JFrame {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				_mode = (int) e.getItem();
+				System.out.println(_mode);
 				
 			}
 		});
