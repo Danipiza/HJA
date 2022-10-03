@@ -1,0 +1,14 @@
+AhAc;3;QhJhTh
+ - Best hand: Pair of Aces with AhAcQhJhTh
+ - Draw: Straight Gutshot
+ - Draw: Flush
+
+3h3c;4;3h3h4h4c
+ - Best hand: Four of a kind (3s) with 4h3h3c3h3h
+
+3h3c;5;QhJhTh4c4c
+ - Best hand: Two pair of 4s and 3s with Qh4c4c3h3c
+
+AhAc;5;As2s3h4dJd
+ - Best hand: Three of a kind (Aces) with AhAcAsJd4d
+
