@@ -41,7 +41,7 @@ public class Controller {
 		}
 	}
 	
-	public void run1() throws FileNotFoundException {
+	public String run1() throws FileNotFoundException {
 		me.CardsValue();
 		String output = input + '\n';
 		output += " - Best hand: " + me.getHandName() + " with " + me.getBestHand() + '\n';
@@ -56,6 +56,8 @@ public class Controller {
 		_outFile = "salida1.txt";
 		
 		print(output);
+		
+		return output;
 	}
 	
 	
@@ -83,7 +85,7 @@ public class Controller {
 		}
 	}
 	
-	public void run2() throws FileNotFoundException {
+	public String run2() throws FileNotFoundException {
 		me.CardsValue();
 		String output = input + '\n';
 		output += " - Best hand: " + me.getHandName() + " with " + me.getBestHand() + '\n';
@@ -98,6 +100,9 @@ public class Controller {
 		_outFile = "salida2.txt";
 		
 		print(output);
+		
+		return output;
+
 	}
 	
 	
@@ -139,7 +144,7 @@ public class Controller {
 		
 	}
 	
-	public void run3() throws FileNotFoundException {
+	public String run3() throws FileNotFoundException {
 		for (Player p : players) {
 			p.CardsValue();
 		}
@@ -153,6 +158,9 @@ public class Controller {
 		_outFile = "salida3.txt";
 		
 		print (output);
+		
+		return output;
+
 	}	
 	
 	public void loadDeck4(BufferedReader in) throws Exception {
@@ -181,7 +189,7 @@ public class Controller {
 		
 	}
 	
-	public void run4() throws FileNotFoundException {
+	public String run4() throws FileNotFoundException {
 		me.OmahaCardsValue();
 		String output = input + '\n';
 		output += " - Best hand: " + me.getHandName() + " with " + me.getBestHand() + '\n';
@@ -196,6 +204,9 @@ public class Controller {
 		_outFile = "salida4.txt";
 		
 		print(output);
+		
+		return output;
+
 	}
 	
 	private void playerSorting(List<Player> playerList) {
