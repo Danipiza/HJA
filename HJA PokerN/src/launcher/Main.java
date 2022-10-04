@@ -50,8 +50,8 @@ public class Main {
 				ctrl.loadDeck3(br); //Se carga el mazo
 				ctrl.run3();
 			} else if(apartado == 4) {
-				ctrl.loadDeck3(br); //Se carga el mazo
-				ctrl.run3();
+				ctrl.loadDeck4(br); //Se carga el mazo
+				ctrl.run4();
 			}
 			//MainWindow window = new MainWindow(ctrl, apartado, br);
 		} catch (Exception e) {
