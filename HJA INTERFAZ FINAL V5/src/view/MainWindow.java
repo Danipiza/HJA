@@ -26,18 +26,23 @@ public class MainWindow extends JFrame {
 	
 	private Border border = BorderFactory.createLineBorder(Color.black, 3);
 	
+	private ControlPanel _panel;
+	private MapComponent _map;
+	
 	public MainWindow(Controller ctrl) {
 		super("PokerStars");
 		_ctrl = ctrl;
 		initGUI();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	}
 	
 	private void initGUI() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.setContentPane(mainPanel);		
 		
-		mainPanel.add(new ControlPanel(_ctrl), BorderLayout.PAGE_START);		
-		
+		_panel = new ControlPanel(_ctrl);
+		mainPanel.add(_panel, BorderLayout.PAGE_START);		
+
 		JPanel viewPanel = new JPanel(new GridLayout(1, 2));
 		mainPanel.add(viewPanel, BorderLayout.CENTER);		
 	
@@ -46,13 +51,14 @@ public class MainWindow extends JFrame {
 		viewPanel.add(mapPanel);
 		
 		// MESA
-		JPanel tableView = createViewPanel(new MapComponent(_ctrl), "Table");
-		tableView.setPreferredSize(new Dimension(500, 400));
+		_map = new MapComponent(_ctrl);
+		JPanel tableView = createViewPanel(_map, "Table");
+		tableView.setPreferredSize(new Dimension(1000, 560));
 		mapPanel.add(tableView);		
 		
+		_panel.setMap(_map);
 		
-		
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
 	}
@@ -60,7 +66,7 @@ public class MainWindow extends JFrame {
 	private JPanel createViewPanel(JComponent c, String title) {
 		JPanel p = new JPanel( new BorderLayout());
 		
-		// AÑADE UN BORDE
+		// Aï¿½ADE UN BORDE
 		p.setBorder(BorderFactory.createTitledBorder(border, title, TitledBorder.LEFT, TitledBorder.TOP));
 		
 		p.add(new JScrollPane(c));

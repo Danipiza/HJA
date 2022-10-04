@@ -28,6 +28,8 @@ public class ControlPanel extends JPanel {
 	private JButton partButton;		
 	private JButton runButton;		
 	private JButton exitButton;
+	
+	private MapComponent _map;
 		
 	public ControlPanel(Controller _ctrl) {
 		ctrl = _ctrl;
@@ -160,15 +162,22 @@ public class ControlPanel extends JPanel {
 		
 		enableToolBar(true);		
 		
-		repaint();	
+		_map.paintComponent(_map.getGraphics());
+		if (ctrl.getPart() == 3) ctrl.resetRun3();
+		
+		/*repaint();	
 		//super.updateUI();
-		super.paintComponent(getGraphics());
+		super.paintComponent(getGraphics());*/
 		
 	}
 	
-	void enableToolBar(boolean b) {
+	private void enableToolBar(boolean b) {
 		partButton.setEnabled(b);		
 		runButton.setEnabled(b);
+	}
+	
+	public void setMap(MapComponent m) {
+		_map = m;
 	}
 	
 	

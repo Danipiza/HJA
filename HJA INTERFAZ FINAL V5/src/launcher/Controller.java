@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import view.ControlPanel;
+
 
 public class Controller {
 	
@@ -153,7 +155,6 @@ public class Controller {
 		}
 		
 		input = "";
-		players.clear();
 		
 		return output;
 	}	
@@ -275,6 +276,10 @@ public class Controller {
 	
 	}
 	
+	public void resetRun3() {
+		players.clear();
+	}
+		
 }
 
 

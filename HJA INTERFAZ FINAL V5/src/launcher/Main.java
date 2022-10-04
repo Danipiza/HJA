@@ -97,6 +97,7 @@ public class Main {
 					output += '\n';
 					ctrl.loadDeck3(br); 
 					output += ctrl.run3();
+					ctrl.resetRun3();
 				}
 			} else if(apartado == 4) {
 				ctrl.loadDeck4(br); 
