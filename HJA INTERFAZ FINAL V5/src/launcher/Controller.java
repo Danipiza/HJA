@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import view.ControlPanel;
+import view.MainWindow;
 
 
 public class Controller {
@@ -22,6 +22,8 @@ public class Controller {
 	private int part;
 	
 	private String in;
+	MainWindow window;
+
 	
 	public Controller() {
 		input = "";
@@ -278,6 +280,13 @@ public class Controller {
 	
 	public void resetRun3() {
 		players.clear();
+	}
+	
+	public void setWindow(MainWindow w) {
+		window = w;
+	}
+	public void setText(String info) {
+		window.setText(info);
 	}
 		
 }

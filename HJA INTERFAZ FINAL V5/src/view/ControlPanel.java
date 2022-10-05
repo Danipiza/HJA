@@ -8,11 +8,13 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
@@ -30,6 +32,7 @@ public class ControlPanel extends JPanel {
 	private JButton exitButton;
 	
 	private MapComponent _map;
+	private JTextArea _text;
 		
 	public ControlPanel(Controller _ctrl) {
 		ctrl = _ctrl;
@@ -145,25 +148,31 @@ public class ControlPanel extends JPanel {
 	
 	// HAY QUE MIRARLO
 	private void run_sim() throws FileNotFoundException {
-		
+		String info ="";
 		if (ctrl.getPart() == 1) {
-			ctrl.run1();
+			info = ctrl.run1();
 		}
 		else if(ctrl.getPart() == 2) {
-			ctrl.run2();
+			info = ctrl.run2();
 		}
 		else if(ctrl.getPart() == 3) {
 			ctrl.run3();
 		}
 		else if(ctrl.getPart() == 4) {
-			ctrl.run4();
+			info = ctrl.run4();
 		}
 		
 		
 		enableToolBar(true);		
 		
-		_map.paintComponent(_map.getGraphics());
-		if (ctrl.getPart() == 3) ctrl.resetRun3();
+		if (ctrl.getPart() == 3) {
+			_map.paintComponent(_map.getGraphics());
+			ctrl.resetRun3();
+		}
+		
+		else {
+			ctrl.setText(info);
+		}
 		
 		/*repaint();	
 		//super.updateUI();
@@ -178,6 +187,10 @@ public class ControlPanel extends JPanel {
 	
 	public void setMap(MapComponent m) {
 		_map = m;
+	}
+	
+	public void setTextArea(JTextArea t) {
+		_text = t;
 	}
 	
 	

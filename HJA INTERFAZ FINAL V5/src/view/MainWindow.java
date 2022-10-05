@@ -11,6 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 //import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -28,6 +29,7 @@ public class MainWindow extends JFrame {
 	
 	private ControlPanel _panel;
 	private MapComponent _map;
+	private JTextArea _text;
 	
 	public MainWindow(Controller ctrl) {
 		super("PokerStars");
@@ -58,6 +60,16 @@ public class MainWindow extends JFrame {
 		
 		_panel.setMap(_map);
 		
+		_text = new JTextArea();
+		JPanel textView = new JPanel(new BorderLayout());
+		textView.setBorder(BorderFactory.createTitledBorder(border, "Information", TitledBorder.LEFT, TitledBorder.TOP));
+		textView.add(_text);
+		mainPanel.add(textView, BorderLayout.SOUTH);
+		
+		_panel.setTextArea(_text);
+		
+		_ctrl.setWindow(this);
+		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
@@ -71,5 +83,9 @@ public class MainWindow extends JFrame {
 		
 		p.add(new JScrollPane(c));
 		return p;
+	}
+	
+	public void setText(String info) {
+		_text.setText(info);
 	}
 }
