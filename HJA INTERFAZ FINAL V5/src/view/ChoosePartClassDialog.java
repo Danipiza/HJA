@@ -5,17 +5,22 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+
+import launcher.Controller;
 
 
 
@@ -28,15 +33,19 @@ public class ChoosePartClassDialog extends JDialog {
 	private JComboBox<Integer> part;
 	private DefaultComboBoxModel<Integer> partModel;	
 	
-	private JTextField inField;
+	private JButton inField;
+	private JFileChooser fChooser;
+	private Controller _ctrl;
 		
-	public ChoosePartClassDialog(Frame parent) {
+	public ChoosePartClassDialog(Frame parent, Controller ctrl) {
 		super(parent, true);
+		_ctrl = ctrl;
 		initGUI();		
 	}
 	
-	public ChoosePartClassDialog() {		
+	public ChoosePartClassDialog(Controller ctrl) {		
 		super();
+		_ctrl = ctrl;
 		initGUI();		
 	}
 	
@@ -77,14 +86,13 @@ public class ChoosePartClassDialog extends JDialog {
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		identifierPanel.add(identifier);
 		
-		inField = new JTextField(10);		
+		inField = makeButtonFile();	
 		
-		JLabel identifierSpace = new JLabel("                 ");
+		JLabel identifierSpace = new JLabel("    ");
 		
 		identifierPanel.add(identifierSpace);
 		
 		identifierPanel.add(inField);
-
 		
 		JPanel buttonsPanel = new JPanel();
 		mainPanel.add(buttonsPanel);
@@ -113,7 +121,7 @@ public class ChoosePartClassDialog extends JDialog {
 		});
 		buttonsPanel.add(okButton);
 
-		setPreferredSize(new Dimension(420, 200));
+		setPreferredSize(new Dimension(420, 240));
 		pack();
 		setResizable(false);
 		setVisible(false);
@@ -139,6 +147,29 @@ public class ChoosePartClassDialog extends JDialog {
 	public String getInField() {
 		return (String) inField.getText();
 	}	
+	
+	private JButton makeButtonFile() {
+		JButton button = new JButton(new ImageIcon("resources/icons/cards1.png"));
+		button.setToolTipText("Choose the files to run the simulation");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(fChooser == null) {
+					fChooser = new JFileChooser();
+				}
+				fChooser.setEnabled(true);
+				int option = fChooser.showOpenDialog(button);
+				if (option != JFileChooser.CANCEL_OPTION) {
+				
+				File file = fChooser.getSelectedFile();
+				_ctrl.setIn(file);
+					
+				}
+				fChooser.setEnabled(false);
+			}});
+		button.setVisible(true);
+		return button;
+	}
 	
 
 }

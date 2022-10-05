@@ -108,7 +108,7 @@ public class ControlPanel extends JPanel {
 		
 	// SOLO FALTA QUE HACER CUANDO SE CIERRA LA VENTANA
 	protected void choosePartClass() {		
-		ChoosePartClassDialog partDialog = new ChoosePartClassDialog(null); // (Frame) this.getTopLevelAncestor()
+		ChoosePartClassDialog partDialog = new ChoosePartClassDialog(null, ctrl); // (Frame) this.getTopLevelAncestor()
 
 		
 		// LISTA DE ENTEROS DE LAS DIFERENTES PARTES DEL PROYECTO
@@ -123,9 +123,7 @@ public class ControlPanel extends JPanel {
 		if (estado == 1) {			
 			
 			try {				
-				ctrl.setPart(partDialog.getPart());
-				ctrl.setIn(partDialog.getInField());
-				
+				ctrl.setPart(partDialog.getPart());				
 				ctrl.loadDecks();
 								
 			} catch (Exception e) {
@@ -142,7 +140,8 @@ public class ControlPanel extends JPanel {
 	protected void start() throws FileNotFoundException {		
 		partButton.setEnabled(false);		
 		runButton.setEnabled(false);		
-		
+		//ctrl.resetRun3();
+
 		run_sim();
 	}
 	
@@ -156,7 +155,7 @@ public class ControlPanel extends JPanel {
 			info = ctrl.run2();
 		}
 		else if(ctrl.getPart() == 3) {
-			ctrl.run3();
+			info = ctrl.run3();
 		}
 		else if(ctrl.getPart() == 4) {
 			info = ctrl.run4();
@@ -167,12 +166,10 @@ public class ControlPanel extends JPanel {
 		
 		if (ctrl.getPart() == 3) {
 			_map.paintComponent(_map.getGraphics());
-			ctrl.resetRun3();
 		}
 		
-		else {
-			ctrl.setText(info);
-		}
+		ctrl.setText(info);
+		
 		
 		/*repaint();	
 		//super.updateUI();

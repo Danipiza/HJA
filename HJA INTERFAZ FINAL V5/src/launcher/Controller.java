@@ -21,7 +21,7 @@ public class Controller {
 	
 	private int part;
 	
-	private String in;
+	private File in;
 	MainWindow window;
 
 	
@@ -109,6 +109,7 @@ public class Controller {
 	
 	
 	public void loadDeck3(BufferedReader in) throws Exception {
+		players.clear();
 		int numPlayers;
 		char value, suit = ' '; 
 		numPlayers = in.read();
@@ -241,11 +242,11 @@ public class Controller {
 		this.part = x;
 	}
 	
-	public String getIn() {
+	public File getIn() {
 		return in;
 	}
 	
-	public void setIn(String x) {
+	public void setIn(File x) {
 		this.in = x;
 	}
 	
@@ -257,7 +258,7 @@ public class Controller {
 	public void loadDecks() throws Exception {
 		BufferedReader br;
 		
-		br = new BufferedReader(new FileReader(new File(this.in+".txt")));
+		br = new BufferedReader(new FileReader(in));
 		
 		// SE CARGA EL MAZO
 		if(part == 1) {
