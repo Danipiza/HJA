@@ -9,13 +9,10 @@ public class HandButton extends JButton{
 	private Color color;
 	private String hand;
 	
-	
-	
 	public HandButton(String h, Color c) {
 		hand = h;
 		color = c;
-		setBackground(c);
-		
+		setBackground(c);	
 	}
 	
 	public void clicked() {
@@ -24,9 +21,11 @@ public class HandButton extends JButton{
    	 	else
    	 		setBackground(Color.yellow);
 	}
+	
 	public void textActivated() {
 		setBackground(Color.yellow);
 	}
+	
 	public void clear() {
 		setBackground(color);
 	}
@@ -34,6 +33,7 @@ public class HandButton extends JButton{
 	public Color getColor() {
 		return color;
 	}
+	
 	public void setColor(Color color) {
 		this.color = color;
 	}
@@ -41,9 +41,8 @@ public class HandButton extends JButton{
 	public String getHand() {
 		return hand;
 	}
+	
 	public void setHand(String hand) {
 		this.hand = hand;
 	}
-	
-	
 }

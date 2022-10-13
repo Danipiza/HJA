@@ -3,7 +3,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
@@ -23,20 +25,20 @@ public class MainWindow extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private HashMap<String, HandButton> preflopHands;
-	private HashMap<Integer, String> percentRange;
+	private HashMap<Integer, String[]> percentRange;
 	
 	private Border RSBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
 
 	public MainWindow() {
 		preflopHands = new HashMap<String, HandButton>();
-		percentRange = new HashMap<Integer, String>();
+		percentRange = new HashMap<Integer, String[]>();
 		initPercentRange();
 		initGUI();
 	}
 	
 	private void initGUI() {
 		
-		setSize(1000,1000);  
+		setSize(700,1000);  
 	    setLayout(null);  	
 		setVisible(true);  
 		
@@ -189,7 +191,12 @@ public class MainWindow extends JFrame{
 		        	 inputToSim(percentRange.get(Integer.parseInt(percentageInput.getText())));
 		         }
 		      });
+<<<<<<< Updated upstream
 			add(percentageInput); 	*/
+=======
+			add(percentageInput); 	
+			
+>>>>>>> Stashed changes
 	}
 	
 	private void inputToSim(String input) {
@@ -217,6 +224,7 @@ public class MainWindow extends JFrame{
 		
 		instructionProcessor(aux, aux2, interval);
 	}
+	
 	private void instructionProcessor(String instr1, String instr2, Boolean interval) {
 		if (instr1.charAt(instr1.length()-1) == '+') {
 			instr1 = instr1.substring(0, instr1.length()-1);
@@ -277,16 +285,38 @@ public class MainWindow extends JFrame{
 		
 		return ret;
 	}
-	
-	
+	/*
+	// 
+	 * 5  | AA, KK, QQ, JJ, TT, 99, 88, AKs, AQs, AJs, KQs, AKo,
+	 * 10 | 77, A9s, ATs, KJs, KTs, QJs, QTs, AQo, AJo, KQo
+	 * 15 | A7s A8s A9s K9s QTs JTs ATo KJo KTo KJo KTo
+	 * 20 | 66 A6s A5s A4s K8s Q9s J9s T9s A9o QTo JTo
+	 * 25 | A2s A3s K6s K7s Q8s J8s T8s A7o A8o K9o
+	 * 30 | 55 K5s Q7s 98s A5o Q9o J9o JTo
+	 * 
+	 * 35 | A2s K4s K3s Q6s J7s T7s 97s 87s A4o K9 K9o K8o T9o
+	 * 40 | 
+	 * 45 | 
+	 * 50 | 
+	 * 55 | 
+	 * 60 | 
+	 * 65 | 
+	 * 70 | 
+	 * 75 |
+	 * 80 | 
+	 * 85 | 
+	 * 90 | 
+	 * 95 |  	
+	*/
 	
 	private void initPercentRange() {
-		percentRange.put(5, "88+,AJs+,KQs,AKo");
-		percentRange.put(10, "77+,A9s+,KTs+,QTs+,AJo+,KQo");
-		percentRange.put(15, "77+,A7s+,K9s+,QTs+,JTs,ATo+,KTo+,QJo");
-		percentRange.put(20, "66+,A4s+,K8s+,Q9s+,J9s+,T9s,A9o+,KTo+,QTo+,JTo");
-		percentRange.put(25, "66+,A2s+,K6s+,Q8s+,J8s+,T8s+,A7o+,K9o+,QTo+,JTo");
-		percentRange.put(30, "55+,A2s+,K5s+,Q7s+,J8s+,T8s+,98s,A7o+,A5o,K9o+,Q9o+,J9o+,T9o");
+		percentRange.put(5, new String[] { "AA", "KK", "QQ", "JJ", "TT", "99", "88", "AKs", "AQs", "AJs", "KQs", "AKo"});
+		percentRange.put(10, new String[] { "77", "A9s", "ATs", "KJs", "KTs", "QJs", "QTs", "AQo", "AJo", "KQo"});
+		percentRange.put(15, new String[] { "A7s", "A8s", "A9s", "K9s", "QTs", "JTs", "ATo", "KJo", "KTo", "KJo", "KTo"});
+		percentRange.put(20, new String[] { "66", "A6s", "A5s", "A4s", "K8s", "Q9s", "J9s", "T9s", "A9o", "QTo", "JTo"});
+		percentRange.put(25, new String[] { "A2s", "A3s", "K6s", "K7s", "Q8s", "J8s", "T8s", "A7o", "A8o", "K9o"});		
+		percentRange.put(30, new String[] { "55", "K5s", "Q7s", "98s", "A5o", "Q9o", "J9o", "JTo"});
+		/*
 		percentRange.put(35, "55+,A2s+,K3s+,Q6s+,J7s+,T7s+,97s+,87s,A4o+,K8o+,Q9o+,J9o+,T9o");
 		percentRange.put(40, "44+,A2s+,K2s+,Q4s+,J7s+,T7s+,97s+,87s,A3o+,K7o+,Q8o+,J8o+,T9o");
 		percentRange.put(45, "44+,A2s+,K2s+,Q4s+,J6s+,T6s+,96s+,86s+,76s,A2o+,K6o+,Q8o+,J8o+,T8o+,98o");
@@ -301,7 +331,7 @@ public class MainWindow extends JFrame{
 		percentRange.put(90, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,93o+,84o+,74o+,64o+,53o+");
 		percentRange.put(95, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,92o+,83o+,73o+,63o+,52o+,43o");
 		percentRange.put(100, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,92o+,82o+,72o+,62o+,52o+,42o+,32o");
-			
+		*/
 	}
 	
 	
