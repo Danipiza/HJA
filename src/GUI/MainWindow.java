@@ -113,7 +113,7 @@ public class MainWindow extends JFrame{
 		    all.setBounds(10,10,40,40);
 		    all.addActionListener(new ActionListener() {
 		         public void actionPerformed(ActionEvent e) {
-		        	// inputToSim(percentRange.get(100));
+		        	 inputToSim(percentRange.get(100));
 		         }
 		      });
 		    extraOptions.add(all, 1, 0);
@@ -188,16 +188,7 @@ public class MainWindow extends JFrame{
 		         public void actionPerformed(ActionEvent e) {
 		        	 inputToSim(percentRange.get(Integer.parseInt(percentageInput.getText())));
 		         }
-		      });
-		      
-		      /*
-<<<<<<< Updated upstream
-			add(percentageInput); 	
-=======
-			add(percentageInput); 	
-			
->>>>>>> Stashed changes
-*/
+		      });*/
 	}
 	
 	
