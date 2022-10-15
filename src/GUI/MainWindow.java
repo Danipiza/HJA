@@ -3,9 +3,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
@@ -115,7 +113,7 @@ public class MainWindow extends JFrame{
 		    all.setBounds(10,10,40,40);
 		    all.addActionListener(new ActionListener() {
 		         public void actionPerformed(ActionEvent e) {
-		        	 inputToSim(percentRange.get(100));
+		        	// inputToSim(percentRange.get(100));
 		         }
 		      });
 		    extraOptions.add(all, 1, 0);
@@ -161,7 +159,7 @@ public class MainWindow extends JFrame{
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					
-					inputToSim(percentRange.get(percentageInput.getValue()));
+					//inputToSim(percentRange.get(percentageInput.getValue()));
 					
 					/*for (int i = 0; i < Math.floor(percentageInput.getValue()/5); i++) {
 						inputToSim(percentRange.get(Math.floor(percentageInput.getValue()/5)));
@@ -175,7 +173,7 @@ public class MainWindow extends JFrame{
 			
 			
 			
-			add(percentageInput);
+			//add(percentageInput);
 			
 			
 			
@@ -191,13 +189,17 @@ public class MainWindow extends JFrame{
 		        	 inputToSim(percentRange.get(Integer.parseInt(percentageInput.getText())));
 		         }
 		      });
+		      
+		      /*
 <<<<<<< Updated upstream
-			add(percentageInput); 	*/
+			add(percentageInput); 	
 =======
 			add(percentageInput); 	
 			
 >>>>>>> Stashed changes
+*/
 	}
+	
 	
 	private void inputToSim(String input) {
 		String aux = "", aux2 = "";
@@ -285,28 +287,28 @@ public class MainWindow extends JFrame{
 		
 		return ret;
 	}
+	
 	/*
-	// 
 	 * 5  | AA, KK, QQ, JJ, TT, 99, 88, AKs, AQs, AJs, KQs, AKo,
 	 * 10 | 77, A9s, ATs, KJs, KTs, QJs, QTs, AQo, AJo, KQo
 	 * 15 | A7s A8s A9s K9s QTs JTs ATo KJo KTo KJo KTo
 	 * 20 | 66 A6s A5s A4s K8s Q9s J9s T9s A9o QTo JTo
 	 * 25 | A2s A3s K6s K7s Q8s J8s T8s A7o A8o K9o
 	 * 30 | 55 K5s Q7s 98s A5o Q9o J9o JTo
-	 * 
 	 * 35 | A2s K4s K3s Q6s J7s T7s 97s 87s A4o K9 K9o K8o T9o
-	 * 40 | 
-	 * 45 | 
-	 * 50 | 
-	 * 55 | 
-	 * 60 | 
-	 * 65 | 
-	 * 70 | 
-	 * 75 |
-	 * 80 | 
-	 * 85 | 
-	 * 90 | 
-	 * 95 |  	
+	 * 40 | 44 K2s Q4s Q5s A3o K7o Q8o J8o 
+	 * 45 | J6s T6s 96s 86s 76s A2o K6o T8o 98o
+	 * 50 | 33 Q2s Q3s J4s J5s 65s K5o Q7o J7o T7o 
+	 * 55 | J3s T5s 95s 85s 75s K4o Q6o 97o 87o
+	 * 60 | 22 J2s T4s T3s 64s 54s K2o K3o Q5o  
+	 * 65 | T2s 94s 84s 74s Q4o J6o 86o 76o
+	 * 70 | 93s 63s 53s 43s Q3o J5o T6o 96o 
+	 * 75 | 92s 83s 73s 52s Q2o J4o 75o 65o
+	 * 80 | 82s 62s J3o T5o 95o 85o 54o
+	 * 85 | 72s 43s 32s J2o T4o T3o 74o 64o 
+	 * 90 | T2o 94o 93o 84o 53o
+	 * 95 | 92o 83o 73o 63o 52o 43o
+	 * 100| 82o 72o 62o 42o 32o 	
 	*/
 	
 	private void initPercentRange() {
@@ -316,23 +318,39 @@ public class MainWindow extends JFrame{
 		percentRange.put(20, new String[] { "66", "A6s", "A5s", "A4s", "K8s", "Q9s", "J9s", "T9s", "A9o", "QTo", "JTo"});
 		percentRange.put(25, new String[] { "A2s", "A3s", "K6s", "K7s", "Q8s", "J8s", "T8s", "A7o", "A8o", "K9o"});		
 		percentRange.put(30, new String[] { "55", "K5s", "Q7s", "98s", "A5o", "Q9o", "J9o", "JTo"});
-		/*
-		percentRange.put(35, "55+,A2s+,K3s+,Q6s+,J7s+,T7s+,97s+,87s,A4o+,K8o+,Q9o+,J9o+,T9o");
-		percentRange.put(40, "44+,A2s+,K2s+,Q4s+,J7s+,T7s+,97s+,87s,A3o+,K7o+,Q8o+,J8o+,T9o");
-		percentRange.put(45, "44+,A2s+,K2s+,Q4s+,J6s+,T6s+,96s+,86s+,76s,A2o+,K6o+,Q8o+,J8o+,T8o+,98o");
-		percentRange.put(50, "33+,A2s+,K2s+,Q2s+,J4s+,T6s+,96s+,86s+,76s,65s,A2o+,K5o+,Q7o+,J7o+,T7o+,98o");
-		percentRange.put(55, "33+,A2s+,K2s+,Q2s+,J3s+,T5s+,95s+,85s+,75s+,65s,A2o+,K4o+,Q6o+,J7o+,T7o+,97o+,87o");
-		percentRange.put(60, "22+,A2s+,K2s+,Q2s+,J2s+,T3s+,95s+,85s+,75s+,64s+,54s,A2o+,K2o+,Q5o+,J7o+,T7o+,97o+,87o");
-		percentRange.put(65, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,94s+,84s+,74s+,64s+,54s,A2o+,K2o+,Q4o+,J6o+,T7o+,97o+,86o+,76o");
-		percentRange.put(70, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,93s+,84s+,74s+,63s+,53s+,43s,A2o+,K2o+,Q3o+,J5o+,T6o+,96o+,86o+,76o");
-		percentRange.put(75, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,83s+,73s+,63s+,52s+,43s,A2o+,K2o+,Q2o+,J4o+,T6o+,96o+,86o+,75o+,65o");
-		percentRange.put(80, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,73s+,62s+,52s+,43s,A2o+,K2o+,Q2o+,J3o+,T5o+,95o+,85o+,75o+,65o,54o");
-		percentRange.put(85, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T3o+,95o+,85o+,74o+,64o+,54o");
-		percentRange.put(90, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,93o+,84o+,74o+,64o+,53o+");
-		percentRange.put(95, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,92o+,83o+,73o+,63o+,52o+,43o");
-		percentRange.put(100, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,92o+,82o+,72o+,62o+,52o+,42o+,32o");
-		*/
+		percentRange.put(35, new String[] { "A2s", "K4s", "K3s", "Q6s", "J7s", "T7s", "97s", "87s", "A4o", "K9", "K9o", "K8o", "T9o"});
+		percentRange.put(40, new String[] { "44", "K2s", "Q4s", "Q5s", "A3o", "K7o", "Q8o", "J8o" });
+		percentRange.put(45, new String[] { "J6s", "T6s", "96s", "86s", "76s", "A2o", "K6o", "T8o", "98o"});
+		percentRange.put(50, new String[] { "33", "Q2s", "Q3s", "J4s", "J5s", "65s", "K5o", "Q7o", "J7o", "T7o"});
+		percentRange.put(55, new String[] { "J3s", "T5s", "95s", "85s", "75s", "K4o", "Q6o", "97o", "87o"});
+		percentRange.put(60, new String[] { "22", "J2s", "T4s", "T3s", "64s", "54s", "K2o", "K3o", "Q5o" });
+		percentRange.put(65, new String[] { "T2s", "94s", "84s", "74s", "Q4o", "J6o", "86o", "76o"});
+		percentRange.put(70, new String[] { "93s", "63s", "53s", "43s", "Q3o", "J5o", "T6o", "96o" });
+		percentRange.put(75, new String[] { "92s", "83s", "73s", "52s", "Q2o", "J4o", "75o", "65o"});
+		percentRange.put(80, new String[] { "82s", "62s", "J3o", "T5o", "95o", "85o", "54o"});
+		percentRange.put(85, new String[] { "72s", "43s", "32s", "J2o", "T4o", "T3o", "74o", "64o" });
+		percentRange.put(90, new String[] { "T2o", "94o", "93o", "84o", "53o"});
+		percentRange.put(95, new String[] { "92o", "83o", "73o", "63o", "52o", "43o"});
+		percentRange.put(100, new String[] { "82o", "72o", "62o", "42o", "32o" });
+		
 	}
 	
+/*
+	percentRange.put(35, "55+,A2s+,K3s+,Q6s+,J7s+,T7s+,97s+,87s,A4o+,K8o+,Q9o+,J9o+,T9o");
+	percentRange.put(40, "44+,A2s+,K2s+,Q4s+,J7s+,T7s+,97s+,87s,A3o+,K7o+,Q8o+,J8o+,T9o");
+	percentRange.put(45, "44+,A2s+,K2s+,Q4s+,J6s+,T6s+,96s+,86s+,76s,A2o+,K6o+,Q8o+,J8o+,T8o+,98o");
+	percentRange.put(50, "33+,A2s+,K2s+,Q2s+,J4s+,T6s+,96s+,86s+,76s,65s,A2o+,K5o+,Q7o+,J7o+,T7o+,98o");
+	percentRange.put(55, "33+,A2s+,K2s+,Q2s+,J3s+,T5s+,95s+,85s+,75s+,65s,A2o+,K4o+,Q6o+,J7o+,T7o+,97o+,87o");
+	percentRange.put(60, "22+,A2s+,K2s+,Q2s+,J2s+,T3s+,95s+,85s+,75s+,64s+,54s,A2o+,K2o+,Q5o+,J7o+,T7o+,97o+,87o");
+	percentRange.put(65, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,94s+,84s+,74s+,64s+,54s,A2o+,K2o+,Q4o+,J6o+,T7o+,97o+,86o+,76o");
+	percentRange.put(70, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,93s+,84s+,74s+,63s+,53s+,43s,A2o+,K2o+,Q3o+,J5o+,T6o+,96o+,86o+,76o");
+	percentRange.put(75, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,83s+,73s+,63s+,52s+,43s,A2o+,K2o+,Q2o+,J4o+,T6o+,96o+,86o+,75o+,65o");
+	percentRange.put(80, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,73s+,62s+,52s+,43s,A2o+,K2o+,Q2o+,J3o+,T5o+,95o+,85o+,75o+,65o,54o");
+	percentRange.put(85, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T3o+,95o+,85o+,74o+,64o+,54o");
+	
+	percentRange.put(90, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,93o+,84o+,74o+,64o+,53o+");
+	percentRange.put(95, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,92o+,83o+,73o+,63o+,52o+,43o");
+	percentRange.put(100, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,92o+,82o+,72o+,62o+,52o+,42o+,32o");
+	*/
 	
 }
