@@ -203,19 +203,15 @@ public class MainWindow extends JFrame{
 	
 	
 	private void inputToGUI(String input) {
-		StringTokenizer st = new StringTokenizer(input);  
-        
-		st.nextToken(",");
-		while (st.hasMoreTokens()) {
-			if (st.toString().contains("-")) {
-				String parts[] = st.toString().split("-");
+		String cards[] = input.replace(" ", "").split(",");
+		for (int i = 0; i < cards.length; i++) {
+			if (cards[i].toString().contains("-")) {
+				String parts[] = cards[i].toString().split("-");
 				intervalToGUI(parts[0], parts[1]);
 			}
 			else
-				instructionToGUI(st.toString());
-			
-			st.nextToken(",");
-		} 
+				instructionToGUI(cards[i].toString());
+		}
 	}
 	
 	private void instructionToGUI(String instr1) {
