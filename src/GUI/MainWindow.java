@@ -5,13 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.StringTokenizer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -50,9 +50,6 @@ public class MainWindow extends JFrame{
 		rangeInput.setBounds(80,10, 486, 50);  
 		rangeInput.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent e) {
-	        	 /*for (Entry<String, HandButton> hb : preflopHands.entrySet()) {
-	        		 hb.getValue().clear();
-	        	 } */
 	        	 clear();
 	        	 inputToGUI(rangeInput.getText());
 	         }
@@ -115,7 +112,7 @@ public class MainWindow extends JFrame{
 		    all.setBounds(10,10,40,40);
 		    all.addActionListener(new ActionListener() {
 		         public void actionPerformed(ActionEvent e) {
-		        	 //inputToSim(percentRange.get(100));
+		        	 selectAll();
 		         }
 		      });
 		    extraOptions.add(all, 1, 0);
@@ -130,9 +127,6 @@ public class MainWindow extends JFrame{
 			clear.setBounds(10,60,40,40);
 			clear.addActionListener(new ActionListener() {
 		         public void actionPerformed(ActionEvent e) {
-		        	 /*for (Entry<String, HandButton> hb : preflopHands.entrySet()) {
-		        		 hb.getValue().clear();
-		        	 } */
 		        	 clear();
 		         }
 		      });
@@ -179,6 +173,12 @@ public class MainWindow extends JFrame{
 			
 	}
 	
+	void selectAll() {
+		for (Entry<String, HandButton> hb : preflopHands.entrySet()) {
+			hb.getValue().clicked();
+		}
+	}
+	
 	void clear() {
 		for (Entry<String, HandButton> hb : preflopHands.entrySet()) {
 			hb.getValue().clear();
@@ -204,14 +204,19 @@ public class MainWindow extends JFrame{
 	
 	private void inputToGUI(String input) {
 		String cards[] = input.replace(" ", "").split(",");
-		for (int i = 0; i < cards.length; i++) {
-			if (cards[i].toString().contains("-")) {
-				String parts[] = cards[i].toString().split("-");
-				intervalToGUI(parts[0], parts[1]);
-			}
-			else
-				instructionToGUI(cards[i].toString());
+		try {
+			for (int i = 0; i < cards.length; i++) {
+				if (cards[i].toString().contains("-")) {
+					String parts[] = cards[i].toString().split("-");
+					intervalToGUI(parts[0], parts[1]);
+				}
+				else
+					instructionToGUI(cards[i].toString());
+			}			
+		} catch(Exception E) {
+			JOptionPane.showMessageDialog(this, "Error: Wrong Identifier");
 		}
+		
 	}
 	
 	private void instructionToGUI(String instr1) {
@@ -238,17 +243,24 @@ public class MainWindow extends JFrame{
 	
 	private void intervalToGUI(String instr1, String instr2) {	
 		instr2 = instr2.replace(instr2.charAt(1), toChar(toInt(instr2.charAt(1)) - 1));
-		if (instr1.length() == 3)
-			while (!instr1.equals(instr2)) {
-				preflopHands.get(instr1).textActivated();
-				instr1 = instr1.replace(instr1.charAt(1), toChar(toInt(instr1.charAt(1)) - 1));
-			}
-		else 
-			while (!instr1.equals(instr2)) {
-				preflopHands.get(instr1).textActivated();
-				instr1 = instr1.replace(instr1.charAt(0), toChar(toInt(instr1.charAt(0)) - 1));
-			}
-	}
+		try {
+			if (instr1.length() == 3)
+				while (!instr1.equals(instr2)) {
+					preflopHands.get(instr1).textActivated();
+					instr1 = instr1.replace(instr1.charAt(1), toChar(toInt(instr1.charAt(1)) - 1));
+				}
+			else 
+				while (!instr1.equals(instr2)) {
+					preflopHands.get(instr1).textActivated();
+					instr1 = instr1.replace(instr1.charAt(0), toChar(toInt(instr1.charAt(0)) - 1));
+				}
+		}
+		catch(Exception E) {
+			JOptionPane.showMessageDialog(this, "Introduce the higher number in the range first");
+		}
+			
+		}
+		
 	
 	
 
@@ -322,24 +334,5 @@ public class MainWindow extends JFrame{
 		percentRange.put(95, new String[] { "92o", "83o", "73o", "63o", "52o", "43o"});
 		percentRange.put(100, new String[] { "82o", "72o", "62o", "42o", "32o" });
 		
-	}
-	
-/*
-	percentRange.put(35, "55+,A2s+,K3s+,Q6s+,J7s+,T7s+,97s+,87s,A4o+,K8o+,Q9o+,J9o+,T9o");
-	percentRange.put(40, "44+,A2s+,K2s+,Q4s+,J7s+,T7s+,97s+,87s,A3o+,K7o+,Q8o+,J8o+,T9o");
-	percentRange.put(45, "44+,A2s+,K2s+,Q4s+,J6s+,T6s+,96s+,86s+,76s,A2o+,K6o+,Q8o+,J8o+,T8o+,98o");
-	percentRange.put(50, "33+,A2s+,K2s+,Q2s+,J4s+,T6s+,96s+,86s+,76s,65s,A2o+,K5o+,Q7o+,J7o+,T7o+,98o");
-	percentRange.put(55, "33+,A2s+,K2s+,Q2s+,J3s+,T5s+,95s+,85s+,75s+,65s,A2o+,K4o+,Q6o+,J7o+,T7o+,97o+,87o");
-	percentRange.put(60, "22+,A2s+,K2s+,Q2s+,J2s+,T3s+,95s+,85s+,75s+,64s+,54s,A2o+,K2o+,Q5o+,J7o+,T7o+,97o+,87o");
-	percentRange.put(65, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,94s+,84s+,74s+,64s+,54s,A2o+,K2o+,Q4o+,J6o+,T7o+,97o+,86o+,76o");
-	percentRange.put(70, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,93s+,84s+,74s+,63s+,53s+,43s,A2o+,K2o+,Q3o+,J5o+,T6o+,96o+,86o+,76o");
-	percentRange.put(75, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,83s+,73s+,63s+,52s+,43s,A2o+,K2o+,Q2o+,J4o+,T6o+,96o+,86o+,75o+,65o");
-	percentRange.put(80, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,73s+,62s+,52s+,43s,A2o+,K2o+,Q2o+,J3o+,T5o+,95o+,85o+,75o+,65o,54o");
-	percentRange.put(85, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T3o+,95o+,85o+,74o+,64o+,54o");
-	
-	percentRange.put(90, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,93o+,84o+,74o+,64o+,53o+");
-	percentRange.put(95, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,92o+,83o+,73o+,63o+,52o+,43o");
-	percentRange.put(100, "22+,A2s+,K2s+,Q2s+,J2s+,T2s+,92s+,82s+,72s+,62s+,52s+,42s+,32s,A2o+,K2o+,Q2o+,J2o+,T2o+,92o+,82o+,72o+,62o+,52o+,42o+,32o");
-	*/
-	
+	}	
 }
