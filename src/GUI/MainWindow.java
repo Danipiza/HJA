@@ -175,7 +175,7 @@ public class MainWindow extends JFrame{
 	
 	void selectAll() {
 		for (Entry<String, HandButton> hb : preflopHands.entrySet()) {
-			hb.getValue().clicked();
+			hb.getValue().textActivated();
 		}
 	}
 	
