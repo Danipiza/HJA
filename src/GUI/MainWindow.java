@@ -24,20 +24,24 @@ public class MainWindow extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private HashMap<String, HandButton> preflopHands;
+	private HashMap<String, HandButton> boardHands;
+	private int boardCards;
 	private HashMap<Integer, String[]> percentRange;
 	
 	private Border RSBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
 
 	public MainWindow() {
 		preflopHands = new HashMap<String, HandButton>();
+		boardHands = new HashMap<String, HandButton>();
 		percentRange = new HashMap<Integer, String[]>();
+		boardCards = 0;
 		initPercentRange();
 		initGUI();
 	}
 	
 	private void initGUI() {
 		
-		setSize(700,1000);  
+		setSize(1000,1000);  
 	    setLayout(null);  	
 		setVisible(true);  
 		
@@ -63,7 +67,7 @@ public class MainWindow extends JFrame{
 		
 		
 		String aux = "";
-		for (int j = 0; j < 13; j++)
+		for (int j = 0; j < 13; j++) {
 			for (int i = 0; i < 13; i++) {
 				HandButton b;
 				if (i < j) {
@@ -101,7 +105,58 @@ public class MainWindow extends JFrame{
 			    preflopHands.put(aux, b);
 			    aux = "";
 			}
+		}
 		
+		JLayeredPane selectedboard = new JLayeredPane();
+		selectedboard.setBounds(580, 38, 196, 40);
+		selectedboard.setBorder(RSBorder);
+		add(selectedboard);
+		
+		JLayeredPane boardSimulator = new JLayeredPane();
+		boardSimulator.setBounds(586, 80, 184, 566);
+		boardSimulator.setBorder(RSBorder);
+		add(boardSimulator);			
+		
+		char[] boardSuits = { 'h', 'c', 'd', 's'};
+		Color[] boardColors = {Color.red, Color.green, Color.CYAN, Color.gray};
+		aux = "";
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 13; j++) {
+				aux += toChar(14 - j);
+				aux += boardSuits[i];
+				
+				HandButton b = new HandButton(aux, boardColors[i]);
+				b.setBounds(10 + (i*42),10 + (j* 42),40,40);
+				b.addActionListener(new ActionListener() {
+			         public void actionPerformed(ActionEvent e) {
+			        	if (boardCards > 4) {
+			        		if (b.getBackgroundColor() == Color.yellow) {
+				        		 b.clear();
+				        		 boardCards--;
+			        		}
+			        	}
+			        	else {
+			        		 b.clicked();
+			        		 boardCards++;
+			        	}
+			        		
+			         }
+			      });
+				boardSimulator.add(b, 1, 0);	
+				
+				JLabel l = new JLabel(aux);
+			    l.setBounds(16 + (i*42),10 + (j* 42),40,40);
+			    l.setFont(new Font("Arial", Font.PLAIN, 20));
+			    boardSimulator.add(l, 2, 0);
+			    
+			    boardHands.put(aux, b);
+			    aux = "";
+			}
+		}
+				
+					
+			
+			/*
 			JLayeredPane extraOptions = new JLayeredPane();
 			extraOptions.setBounds(580, 80, 60, 200);
 			extraOptions.setBorder(RSBorder);
@@ -137,7 +192,7 @@ public class MainWindow extends JFrame{
 			clearLabel.setBounds(5,60,60,40);
 			clearLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 			extraOptions.add(clearLabel, 2, 0);
-			    
+			   */
 				 			
 		    JLabel sliderText = new JLabel("Slider based range: ");
 		    sliderText.setBounds(10, 660, 300, 50); 
@@ -315,9 +370,9 @@ public class MainWindow extends JFrame{
 		percentRange.put(0, new String[]  {});
 		percentRange.put(5, new String[]  { "AA", "KK", "QQ", "JJ", "TT", "99", "88", "AKs", "AQs", "AJs", "KQs", "AKo"});
 		percentRange.put(10, new String[] { "77", "A9s", "ATs", "KJs", "KTs", "QJs", "QTs", "AQo", "AJo", "KQo"});
-		percentRange.put(15, new String[] { "A7s", "A8s", "A9s", "K9s", "QTs", "JTs", "ATo", "KJo", "KTo", "KJo", "QJo", "KTo"});
+		percentRange.put(15, new String[] { "A9s", "A8s", "A7s", "K9s", "QTs", "JTs", "ATo", "KJo", "KTo", "KJo", "QJo", "KTo"});
 		percentRange.put(20, new String[] { "66", "A6s", "A5s", "A4s", "K8s", "Q9s", "J9s", "T9s", "A9o", "QTo", "JTo"});
-		percentRange.put(25, new String[] { "A2s", "A3s", "K6s", "K7s", "Q8s", "J8s", "T8s", "A7o", "A8o", "K9o"});		
+		percentRange.put(25, new String[] { "A2s", "A3s", "K7s", "K6s", "Q8s", "J8s", "T8s", "A7o", "A8o", "K9o"});		
 		percentRange.put(30, new String[] { "55", "K5s", "Q7s", "98s", "A5o", "Q9o", "J9o", "JTo"});
 		percentRange.put(35, new String[] { "A2s", "K4s", "K3s", "Q6s", "J7s", "T7s", "97s", "87s", "A4o", "K9o", "K8o", "T9o"});
 		percentRange.put(40, new String[] { "44", "K2s", "Q4s", "Q5s", "A3o", "K7o", "Q8o", "J8o" });

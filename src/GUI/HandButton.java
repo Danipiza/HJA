@@ -34,9 +34,14 @@ public class HandButton extends JButton{
 		return color;
 	}
 	
+	public Color getBackgroundColor() {
+		return getBackground();
+	}
+	
 	public void setColor(Color color) {
 		this.color = color;
 	}
+	
 	
 	public String getHand() {
 		return hand;
