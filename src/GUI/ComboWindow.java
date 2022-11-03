@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,10 +8,18 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+
 import java.util.Map.Entry;
 
 
-public class ComboWindow {
+public class ComboWindow extends JPanel{
+	
+	private static final long serialVersionUID = 1L;
+	
 	
 	private List<String> straightFlush; private int numStraightFlush;
 	private List<String> four;			private int numFour;
@@ -46,11 +55,37 @@ public class ComboWindow {
 		noMadeHand = new LinkedList<String>();		numNoMadeHand = 0;
 		
 		totalCombos = 0;
+		
+		initGUI();
 	}
-
+	
+	private void initGUI(){
+		setLayout(new BorderLayout());
+		
+	
+		
+		for (int i = 0; i < 15; i++) {
+			if(i != 14) {
+				JLabel inputText = new JLabel(i+1 + ": ");
+				inputText.setBounds(10,10+42*i, 40, 40); 
+				inputText.setFont(new Font("Arial", Font.PLAIN, 20));
+				add(inputText);
+				
+				JProgressBar jb;
+				jb=new JProgressBar(); 
+				jb.setBounds(50,10+42*i,100,40); 
+				System.out.println(i + " " + jb.getBounds());
+				add(jb);
+				repaint();
+			}
+			
+			
+		}
+		
+	}
 	
 	public void updateCombos(Set<String> range, List<String> board) {
-		cardSorting(board);
+		boardSorting(board);
 		
 		//BOARD FLUSH
 		HashMap<Character, Integer> suitMap = new HashMap<Character, Integer>();
@@ -342,6 +377,22 @@ public class ComboWindow {
 			}
 		}
 		
+		// ORDENA TODAS LAS LISTAS
+		//finalSorting(straightFlush);
+		finalSorting(four);
+		finalSorting(fullHouse);
+		//finalSorting(flush);
+		finalSorting(straight);
+		finalSorting(three);
+		finalSorting(doublePair);
+		finalSorting(overpair);
+		finalSorting(topPair);
+		finalSorting(ppBelowTp);
+		finalSorting(middlePair);
+		finalSorting(weakPair);
+		finalSorting(aceHigh);
+		finalSorting(noMadeHand);
+		
 		System.out.println("straight flush " + numStraightFlush + " " + straightFlush);
 		System.out.println("four " + numFour + " " + four);
 		System.out.println("fullHouse " + numFullHouse + " " + fullHouse);
@@ -372,7 +423,7 @@ public class ComboWindow {
 		
 		combinacion.add(aux.substring(0,2));
 		combinacion.add(aux.substring(2));
-		cardSorting(combinacion);
+		boardSorting(combinacion);
 		int cont = 0, max = 0;
 		for (int i = 1; i < combinacion.size(); i++) {
 			if (toInt(combinacion.get(i-1).charAt(0)) == toInt(combinacion.get(i).charAt(0)) + 1 
@@ -387,9 +438,11 @@ public class ComboWindow {
 		max = Math.max(max, cont);
 		return max > 3;
 	}
+	
+	
 
 
-	private void cardSorting(List<String> board) {
+	private void boardSorting(List<String> board) {
 		Collections.sort(board, new SortLocation());
 	}
 
@@ -415,6 +468,30 @@ public class ComboWindow {
 			else if (toInt(c1) == toInt(c2))
 				return 0;
 			return 1;
+		}
+	}
+	
+	private void finalSorting(List<String> hand) {
+		Collections.sort(hand, new SortFinal());
+	}
+	
+	class SortFinal implements Comparator<String>{
+		public int compare(String s1, String s2) {
+			if (toInt(s1.charAt(0)) > toInt(s2.charAt(0)))
+				return -1;
+			else if (toInt(s1.charAt(0)) < toInt(s2.charAt(0)))
+				return 1;
+			else {
+				if (toInt(s1.charAt(1)) > toInt(s2.charAt(0)))
+					return -1;
+				else if (toInt(s1.charAt(1)) < toInt(s2.charAt(1)))
+					return 1;
+				else {
+					if (s1.charAt(2) == 's')
+						return -1;
+					else return 1;
+				}
+			}
 		}
 	}
 	

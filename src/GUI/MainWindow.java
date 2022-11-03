@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -50,11 +51,14 @@ public class MainWindow extends JFrame{
 	
 	private void initGUI() {
 		
-		setSize(1000,1000);  
+		setSize(1500,1000);  
 	    setLayout(null);  	
 		setVisible(true);  
 		
-		ComboWindow temp = new ComboWindow();
+		JPanel combos = new ComboWindow();
+		combos.setBounds(780, 80, 566, 900);
+		combos.setBorder(RSBorder);
+		add(combos);
 		
 		JLabel inputText = new JLabel("Input: ");
 		inputText.setBounds(10,10, 100, 50); 
@@ -69,7 +73,7 @@ public class MainWindow extends JFrame{
 	        	 range.clear();
 	        	 inputToGUI(rangeInput.getText());
 	        	 System.out.println(range + " " + board);
-	        	 temp.updateCombos(range, board);
+	        	 //combos.updateCombos(range, board);
 	         }
 	      });
 		add(rangeInput);
@@ -134,15 +138,13 @@ public class MainWindow extends JFrame{
 		add(selectedboard);
 		JLabel simulatedBoard = new JLabel();
 		simulatedBoard.setFont(new Font("Arial", Font.PLAIN, 20));
-		//simulatedBoard.setBounds(1,1,40,40);
 		simulatedBoard.setBounds(1,1,200,40);
 		selectedboard.add(simulatedBoard);
 		
-	
 		JLayeredPane boardSimulator = new JLayeredPane();
 		boardSimulator.setBounds(586, 80, 184, 566);
 		boardSimulator.setBorder(RSBorder);
-		add(boardSimulator);
+		add(boardSimulator);			
 		
 		char[] boardSuits = { 'h', 'c', 'd', 's'};
 		Color[] boardColors = {Color.red, Color.green, Color.CYAN, Color.gray};
@@ -155,7 +157,7 @@ public class MainWindow extends JFrame{
 				HandButton b = new HandButton(aux, boardColors[i]);
 				b.setBounds(10 + (i*42),10 + (j* 42),40,40);
 				b.addActionListener(new ActionListener() {
-			         public void actionPerformed(ActionEvent e) {
+					public void actionPerformed(ActionEvent e) {
 		        		if (b.getBackground() == Color.yellow) {    
 		        			b.clear();
 			        		boardCards--;	
