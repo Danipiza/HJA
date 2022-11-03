@@ -1,13 +1,18 @@
 package GUI;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -28,6 +33,9 @@ public class MainWindow extends JFrame{
 	private int boardCards;
 	private HashMap<Integer, String[]> percentRange;
 	
+	private Set<String> range;
+	private List<String> board;
+	
 	private Border RSBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
 
 	public MainWindow() {
@@ -35,6 +43,9 @@ public class MainWindow extends JFrame{
 		boardHands = new HashMap<String, HandButton>();
 		percentRange = new HashMap<Integer, String[]>();
 		boardCards = 0;
+		
+		range = new HashSet<String>();
+		board = new LinkedList<String>();
 		initPercentRange();
 		initGUI();
 	}
@@ -44,6 +55,8 @@ public class MainWindow extends JFrame{
 		setSize(1000,1000);  
 	    setLayout(null);  	
 		setVisible(true);  
+		
+		ComboWindow temp = new ComboWindow();
 		
 		JLabel inputText = new JLabel("Input: ");
 		inputText.setBounds(10,10, 100, 50); 
@@ -55,7 +68,10 @@ public class MainWindow extends JFrame{
 		rangeInput.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent e) {
 	        	 clear();
+	        	 range.clear();
 	        	 inputToGUI(rangeInput.getText());
+	        	 System.out.println(range + " " + board);
+	        	 temp.updateCombos(range, board);
 	         }
 	      });
 		add(rangeInput);
@@ -92,7 +108,14 @@ public class MainWindow extends JFrame{
 			    b.setBounds(10 + (i*42),10 + (j* 42),40,40);
 			    b.addActionListener(new ActionListener() {
 			         public void actionPerformed(ActionEvent e) {
-			        	b.clicked();
+			        	 if (b.getBackground() == Color.yellow) {
+			        		 b.clear();
+			        		 range.remove(b.getHand());
+		        		}
+			        	else {
+			        		 b.fill();
+			        		 range.add(b.getHand());
+			        	}
 			         }
 			      });
 			    rangeSimulator.add(b, 1, 0);
@@ -111,11 +134,17 @@ public class MainWindow extends JFrame{
 		selectedboard.setBounds(580, 38, 196, 40);
 		selectedboard.setBorder(RSBorder);
 		add(selectedboard);
+		JLabel simulatedBoard = new JLabel();
+		simulatedBoard.setFont(new Font("Arial", Font.PLAIN, 20));
+		//simulatedBoard.setBounds(1,1,40,40);
+		simulatedBoard.setBounds(1,1,200,40);
+		selectedboard.add(simulatedBoard);
 		
+	
 		JLayeredPane boardSimulator = new JLayeredPane();
 		boardSimulator.setBounds(586, 80, 184, 566);
 		boardSimulator.setBorder(RSBorder);
-		add(boardSimulator);			
+		add(boardSimulator);
 		
 		char[] boardSuits = { 'h', 'c', 'd', 's'};
 		Color[] boardColors = {Color.red, Color.green, Color.CYAN, Color.gray};
@@ -129,17 +158,31 @@ public class MainWindow extends JFrame{
 				b.setBounds(10 + (i*42),10 + (j* 42),40,40);
 				b.addActionListener(new ActionListener() {
 			         public void actionPerformed(ActionEvent e) {
-			        	if (boardCards > 4) {
-			        		if (b.getBackgroundColor() == Color.yellow) {
-				        		 b.clear();
-				        		 boardCards--;
+		        		if (b.getBackground() == Color.yellow) {    
+		        			b.clear();
+			        		boardCards--;	
+			        		board.remove(b.getHand());
+			        		String table = "   ";
+			        		for(String s : board) {
+			        			table += s;
+			        			table += "  ";
+			        		}
+			        		simulatedBoard.setText(table);
+				        	
+		        		}
+			        	else {
+			        		if (boardCards < 5) {
+				        		b.fill();
+				        		boardCards++;		
+				        		board.add(b.getHand());
+				        		String table = "   ";
+				        		for(String s : board) {
+				        			table += s;
+				        			table += "  ";
+				        		}
+				        		simulatedBoard.setText(table);
 			        		}
 			        	}
-			        	else {
-			        		 b.clicked();
-			        		 boardCards++;
-			        	}
-			        		
 			         }
 			      });
 				boardSimulator.add(b, 1, 0);	
@@ -211,6 +254,7 @@ public class MainWindow extends JFrame{
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					clear();
+					range.clear();
 					
 					int porcentaje = percentageInput.getValue() +5;
 					if(porcentaje >=104) {
@@ -230,7 +274,7 @@ public class MainWindow extends JFrame{
 	
 	void selectAll() {
 		for (Entry<String, HandButton> hb : preflopHands.entrySet()) {
-			hb.getValue().textActivated();
+			hb.getValue().fill();
 		}
 	}
 	
@@ -244,16 +288,16 @@ public class MainWindow extends JFrame{
 		int sliderInt = (int) (Math.floor(sliderValue/5));
 		for (int i = 1; i < sliderInt; i++) {
 			for (String instr : percentRange.get(5*i)) {
-				preflopHands.get(instr).textActivated();
+				preflopHands.get(instr).fill();
+				range.add(instr);
 			} 			
 		}
 		String[] lastIntr = percentRange.get(5*sliderInt);
 		int sliderMod = (int) ((sliderValue % 5) * lastIntr.length / 5);
 		for (int i = 0; i <= sliderMod; i++) {
-			preflopHands.get(lastIntr[i]).textActivated();
-		}
-		
-		
+			preflopHands.get(lastIntr[i]).fill();
+			range.add(lastIntr[i]);
+		}	
 	}
 	
 	
@@ -279,12 +323,14 @@ public class MainWindow extends JFrame{
 			instr1 = instr1.substring(0, instr1.length()-1);
 			if (instr1.length() == 3)
 				while (instr1.charAt(0) != instr1.charAt(1)) {
-					preflopHands.get(instr1).textActivated();
+					preflopHands.get(instr1).fill();
+					range.add(instr1);
 					instr1 = instr1.replace(instr1.charAt(1), toChar(toInt(instr1.charAt(1)) + 1));
 				}
 			else 
 				while (instr1.charAt(0) != 'f') {
-					preflopHands.get(instr1).textActivated();
+					preflopHands.get(instr1).fill();
+					range.add(instr1);
 					if (instr1.charAt(0) != 'A')
 						instr1 = instr1.replace(instr1.charAt(0), toChar(toInt(instr1.charAt(0)) + 1));
 					else
@@ -292,7 +338,8 @@ public class MainWindow extends JFrame{
 				}
 		}
 		else {
-			preflopHands.get(instr1).textActivated();
+			preflopHands.get(instr1).fill();
+			range.add(instr1);
 		}
 	}
 	
@@ -301,12 +348,14 @@ public class MainWindow extends JFrame{
 		try {
 			if (instr1.length() == 3)
 				while (!instr1.equals(instr2)) {
-					preflopHands.get(instr1).textActivated();
+					preflopHands.get(instr1).fill();
+					range.add(instr1);
 					instr1 = instr1.replace(instr1.charAt(1), toChar(toInt(instr1.charAt(1)) - 1));
 				}
 			else 
 				while (!instr1.equals(instr2)) {
-					preflopHands.get(instr1).textActivated();
+					preflopHands.get(instr1).fill();
+					range.add(instr1);
 					instr1 = instr1.replace(instr1.charAt(0), toChar(toInt(instr1.charAt(0)) - 1));
 				}
 		}
