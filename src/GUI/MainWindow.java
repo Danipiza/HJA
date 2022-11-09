@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -73,7 +74,7 @@ public class MainWindow extends JFrame{
 	        	 range.clear();
 	        	 inputToGUI(rangeInput.getText());
 	        	 System.out.println(range + " " + board);
-	        	 ((ComboWindow) combos).updateCombos(range, board);
+	        	 ((ComboWindow) combos).updateCombos(range, board, 0);
 	         }
 	      });
 		add(rangeInput);
@@ -113,10 +114,12 @@ public class MainWindow extends JFrame{
 			        	 if (b.getBackground() == Color.yellow) {
 			        		 b.clear();
 			        		 range.remove(b.getHand());
+			        		 ((ComboWindow) combos).updateCombos(range, board, 0);
 		        		}
 			        	else {
 			        		 b.fill();
 			        		 range.add(b.getHand());
+			        		 ((ComboWindow) combos).updateCombos(range, board, 0);
 			        	}
 			         }
 			      });
@@ -199,9 +202,9 @@ public class MainWindow extends JFrame{
 				
 					
 			
-			/*
+			
 			JLayeredPane extraOptions = new JLayeredPane();
-			extraOptions.setBounds(580, 80, 60, 200);
+			extraOptions.setBounds(780, 18, 130, 60);
 			extraOptions.setBorder(RSBorder);
 			add(extraOptions);
 			
@@ -211,6 +214,7 @@ public class MainWindow extends JFrame{
 		    all.addActionListener(new ActionListener() {
 		         public void actionPerformed(ActionEvent e) {
 		        	 selectAll();
+		        	 ((ComboWindow) combos).updateCombos(range, board, 0);
 		         }
 		      });
 		    extraOptions.add(all, 1, 0);
@@ -222,20 +226,22 @@ public class MainWindow extends JFrame{
 			extraOptions.add(allLabel, 2, 0);
 			
 			JButton clear = new JButton();
-			clear.setBounds(10,60,40,40);
+			clear.setBounds(70,10,40,40);
 			clear.addActionListener(new ActionListener() {
 		         public void actionPerformed(ActionEvent e) {
 		        	 clear();
+		        	 ((ComboWindow) combos).updateCombos(range, board, 0);
+		        	 
 		         }
 		      });
 		    extraOptions.add(clear, 1, 0);
 		    
 		
 			JLabel clearLabel = new JLabel("Clear");
-			clearLabel.setBounds(5,60,60,40);
+			clearLabel.setBounds(70,10,60,40);
 			clearLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 			extraOptions.add(clearLabel, 2, 0);
-			   */
+			   
 				 			
 		    JLabel sliderText = new JLabel("Slider based range: ");
 		    sliderText.setBounds(10, 660, 300, 50); 
@@ -265,6 +271,7 @@ public class MainWindow extends JFrame{
 						sliderToGUI(porcentaje);
 					}
 					repaint();
+					((ComboWindow) combos).updateCombos(range, board, 0);
 				}
 			});						
 			
@@ -275,12 +282,14 @@ public class MainWindow extends JFrame{
 	void selectAll() {
 		for (Entry<String, HandButton> hb : preflopHands.entrySet()) {
 			hb.getValue().fill();
+    		 range.add(hb.getValue().getHand());
 		}
 	}
 	
 	void clear() {
 		for (Entry<String, HandButton> hb : preflopHands.entrySet()) {
 			hb.getValue().clear();
+			 range.remove(hb.getValue().getHand());
 		}
 	}
 	

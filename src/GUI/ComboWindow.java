@@ -101,8 +101,14 @@ public class ComboWindow extends JPanel{
 		totalCombos = 0;
 	}
 	
-	public void updateCombos(Set<String> range, List<String> board) {
-		clear();
+	public void addCombos(Set<String> range, List<String> board) {
+		updateCombos(range, board, 1);
+	}
+	
+	public void updateCombos(Set<String> range, List<String> board, int mode) {
+		if(mode != 1) {
+			clear();
+		}
 		boardSorting(board);
 		
 		//BOARD FLUSH
