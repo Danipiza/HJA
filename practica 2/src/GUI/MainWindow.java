@@ -280,7 +280,7 @@ public class MainWindow extends JFrame{
 						sliderToGUI(porcentaje);
 					}
 					repaint();
-					_lbPerc.setText(String.valueOf(porcentaje - 4) + "%");
+					_lbPerc.setText(String.valueOf(porcentaje) + "%");
 					((ComboWindow) combos).updateCombos(range, board, 0);
 				}
 			});						
