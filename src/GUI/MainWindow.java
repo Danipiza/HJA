@@ -74,7 +74,7 @@ public class MainWindow extends JFrame{
 	        	 range.clear();
 	        	 inputToGUI(rangeInput.getText());
 	        	 System.out.println(range + " " + board);
-	        	 ((ComboWindow) combos).updateCombos(range, board, 0);
+	        	 if (board.size() > 2) ((ComboWindow) combos).updateCombos(range, board, 0);
 	         }
 	      });
 		add(rangeInput);
@@ -114,13 +114,14 @@ public class MainWindow extends JFrame{
 			        	 if (b.getBackground() == Color.yellow) {
 			        		 b.clear();
 			        		 range.remove(b.getHand());
-			        		 ((ComboWindow) combos).updateCombos(range, board, 0);
+			        		 if (board.size() > 2) ((ComboWindow) combos).updateCombos(range, board, 0);
 		        		}
 			        	else {
 			        		 b.fill();
 			        		 range.add(b.getHand());
-			        		 ((ComboWindow) combos).updateCombos(range, board, 0);
+			        		 if (board.size() > 2) ((ComboWindow) combos).updateCombos(range, board, 0);
 			        	}
+			        	System.out.println(range + " " + board);
 			         }
 			      });
 			    rangeSimulator.add(b, 1, 0);
@@ -186,6 +187,7 @@ public class MainWindow extends JFrame{
 				        		simulatedBoard.setText(table);
 			        		}
 			        	}
+		        		System.out.println(range + " " + board);
 			         }
 			      });
 				boardSimulator.add(b, 1, 0);	

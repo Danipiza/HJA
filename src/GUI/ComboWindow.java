@@ -226,7 +226,7 @@ public class ComboWindow extends JPanel{
 				}
 			}
 			
-			System.out.println(combinaciones);
+			//System.out.println(combinaciones);
 			
 			//FLUSH
 			
@@ -315,7 +315,7 @@ public class ComboWindow extends JPanel{
 			//FULL HOUSE
 			int contR = 0;
 			boolean parejaR = false, trioR = false;
-			System.out.println(straightCombination);
+			//System.out.println(straightCombination);
 			for (int i = 0; i < straightCombination.size() - 1; i++){
 				if (straightCombination.get(i) == straightCombination.get(i+1))
 					contR++;
@@ -334,7 +334,7 @@ public class ComboWindow extends JPanel{
 			
 			
 			// SAME CARDS
-			System.out.println(board);
+			//System.out.println(board);
 			int repeat1 = 0, repeat2 = 0;
 			if (rangeHand.charAt(0) == rangeHand.charAt(1)) {
 				for (String card : board)
@@ -352,7 +352,7 @@ public class ComboWindow extends JPanel{
 				}
 				repeat1++; repeat2++;
 			}
-			System.out.println(repeat1 + " " + repeat2);
+			//System.out.println(repeat1 + " " + repeat2);
 			
 			// RESULT 
 			String add = rangeHand;
@@ -441,7 +441,7 @@ public class ComboWindow extends JPanel{
 		
 		
 		for(int i = 0; i < 14; i++) {
-			System.out.println(nameList[i] + " " +  numList.get(i) + " " + comboList.get(i));
+			//System.out.println(nameList[i] + " " +  numList.get(i) + " " + comboList.get(i));
 			totalCombos += numList.get(i);
 		}		
 		
@@ -451,8 +451,8 @@ public class ComboWindow extends JPanel{
 			jbList.get(i).setValue(aux);
 		}
 		
-		System.out.println();
-		System.out.println("Numero total de combos " + totalCombos);
+		//System.out.println();
+		//System.out.println("Numero total de combos " + totalCombos);
 	}	
 		
 	private boolean isStraightFlush(String aux, List<String> board) {
