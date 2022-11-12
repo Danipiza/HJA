@@ -1,18 +1,9 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,12 +14,15 @@ import logic.Player;
 
 public class MainWindow extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
 	private Game game;
+	int paso;
 	private JButton _btn;
 	private JPanel tablero;
 	
 	public MainWindow(Game g) {
 		game = g;
+		paso = 0;
 		initGUI();
 	}
 	
@@ -43,27 +37,90 @@ public class MainWindow extends JFrame {
 		setVisible(true);
 
 	}
-
+	
 	private JButton initRepartirButton() {
-		JButton aux = new JButton("Repartir");
-		aux.setBounds(650, 40, 90, 30);
+		JButton aux = new JButton("Siguiente");
+		aux.setBounds(50, 40, 90, 30);
 		aux.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				game.repartir();
-				pintarCartas(game.getCartas());
-				
+				jugar();
 			}
 		});
 		return aux;
 	}
 	
-	private void pintarCartas(List<Player> players) {
+	public void jugar() {
+		switch(paso) {
+			case 0: //Pre-flop
+				game.repartir();
+				pintarCartas();
+				paso++;
+			case 1: //flop
+				
+			case 2: //turn
+				
+			case 3: //river				
+				
+			break;
+			default: 
+				//do nothing				
+			break;
+		}
+	}	
+	
+	private void pintarCartas() {
+		List<Player> players = game.getCartas();
+		
 		//Player 1
-		JLabel aux = players.get(0).getFirstCard().toImage();
-		tablero.add(aux);
-		//No muestra la primera carta del jugador 1 (existe la carta, pero no se carga bien en el JPanel)
+		JLabel carta1j1 = players.get(0).getFirstCard().toImage();
+		tablero.add(carta1j1);
+		carta1j1.setBounds(225, 30, 50, 73);
+		JLabel carta2j1 = players.get(0).getSecondCard().toImage();
+		tablero.add(carta2j1);
+		carta2j1.setBounds(280, 30, 50, 73);
+		
+		//Player 2
+		JLabel carta1j2 = players.get(1).getFirstCard().toImage();
+		tablero.add(carta1j2);
+		carta1j2.setBounds(500, 30, 50, 73);
+		JLabel carta2j2 = players.get(1).getSecondCard().toImage();
+		tablero.add(carta2j2);
+		carta2j2.setBounds(555, 30, 50, 73);
+		
+		
+		//Player 3
+		JLabel carta1j3 = players.get(2).getFirstCard().toImage();
+		tablero.add(carta1j3);
+		carta1j3.setBounds(675, 180, 50, 73);
+		JLabel carta2j3 = players.get(2).getSecondCard().toImage();
+		tablero.add(carta2j3);
+		carta2j3.setBounds(730, 180, 50, 73);
+		
+		//Player 4
+		JLabel carta1j4 = players.get(3).getFirstCard().toImage();
+		tablero.add(carta1j4);
+		carta1j4.setBounds(500, 320, 50, 73);
+		JLabel carta2j4 = players.get(3).getSecondCard().toImage();
+		tablero.add(carta2j4);
+		carta2j4.setBounds(555, 320, 50, 73);
+
+		//Player 5
+		JLabel carta1j5 = players.get(4).getFirstCard().toImage();
+		tablero.add(carta1j5);
+		carta1j5.setBounds(225, 320, 50, 73);
+		JLabel carta2j5 = players.get(4).getSecondCard().toImage();
+		tablero.add(carta2j5);
+		carta2j5.setBounds(280, 320, 50, 73);
+		
+		//Player 6
+		JLabel carta1j6 = players.get(5).getFirstCard().toImage();
+		tablero.add(carta1j6);
+		carta1j6.setBounds(70, 190, 50, 73);
+		JLabel carta2j6 = players.get(5).getSecondCard().toImage();
+		tablero.add(carta2j6);
+		carta2j6.setBounds(125, 190, 50, 73);
+		
 		
 	}
 

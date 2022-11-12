@@ -17,17 +17,8 @@ public class Game {
 	
 	public Game() {
 		initMazo();
-		players = new ArrayList<>(6);
+		players = new ArrayList<Player>();
 		rand = new Random();
-		paso = 0;
-	}
-	
-	public void jugar() {
-		switch(paso) {
-			case 0:
-				repartir();
-			break;
-		}
 	}
 	
 	public void repartir() {
@@ -46,7 +37,6 @@ public class Game {
 			
 		}
 		//TODO Hacer primeros porcentajes
-		paso++;
 	}
 	
 	public List<Player> getCartas() {

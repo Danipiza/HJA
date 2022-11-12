@@ -48,6 +48,7 @@ public class MainWindow extends JFrame{
 		board = new LinkedList<String>();
 		initPercentRange();
 		initGUI();
+		System.out.print("H");
 	}
 	
 	private void initGUI() {
