@@ -11,9 +11,9 @@ public class Game {
 	private static final int FLOP = 3;
 	private static final int BUCLE = 2000000;
 	
-	private List<Card> mazo;
+	private ArrayList<Card> mazo;
 	private List<Player> players;
-	private List<Card> board;
+	private ArrayList<Card> board;
 	
 	// ARRAYS DE PUNTOS Y PORCENTAJES INICIALIZADOS A 0
 	private int[] puntosJug = {0, 0, 0, 0, 0, 0};
@@ -34,17 +34,17 @@ public class Game {
 			case 0: 
 				// PREFLOP: REPARTIR LAS 2 CARTAS A LOS JUGADORES
 				repartir();				
-				//porcentajesPREFLOP();				
+				porcentajesPREFLOP();				
 				break;
 			case 1: 
 				// FLOP: PONER 3 CARTAS EN EL TABLERO
 				flop();
-				//porcentajesPOSTFLOP();				
+				porcentajesPOSTFLOP();				
 				break;
 			case 2: 
 				// TURN: PONER 1 CARTA EN EL TABLERO
 				addCardToBoard();
-				//porcentajesTURN();				
+				porcentajesTURN();				
 				break;
 			case 3: 
 				// RIVER: PONER 1 CARTA EN EL TABLERO
@@ -57,15 +57,15 @@ public class Game {
 		
 		paso++;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public void porcentajesPREFLOP() {		
 		for(int i = 0; i < BUCLE; i++) {
-			List<Card> boardAux = new ArrayList<Card>();
-			boardAux = board;
-			List<Card> mazoAux = new ArrayList<Card>();
-			mazoAux = mazo;
+			ArrayList<Card> boardAux = (ArrayList<Card>) board.clone();			
+			ArrayList<Card> mazoAux = (ArrayList<Card>) mazo.clone();
 			
-			for(int j = 0; j < 5; j++) { // AÑADE 5 CARTAS ALEATORIAS AL TABLERO AUXILIAR
+			
+			for(int j = 0; j < 5; j++) { // AÃ‘ADE 5 CARTAS ALEATORIAS AL TABLERO AUXILIAR
 				int num = rand.nextInt(mazoAux.size());
 				Card c = new Card(mazoAux.get(num).getValue(), mazoAux.get(num).getSuit()); 
 				mazoAux.remove(num);
@@ -96,11 +96,12 @@ public class Game {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void porcentajesPOSTFLOP() {
 		for(int i = 0; i < BUCLE; i++) { 
-			List<Card> boardAux = board;
-			List<Card> mazoAux = mazo;
-			for(int j = 0; j < 2; j++) { // AÑADE 2 CARTAS ALEATORIAS AL TABLERO AUXILIAR
+			ArrayList<Card> boardAux = (ArrayList<Card>) board.clone();			
+			ArrayList<Card> mazoAux = (ArrayList<Card>) mazo.clone();
+			for(int j = 0; j < 2; j++) { // AÃ‘ADE 2 CARTAS ALEATORIAS AL TABLERO AUXILIAR
 				int num = rand.nextInt(mazoAux.size());
 				Card c = new Card(mazoAux.get(num).getValue(), mazoAux.get(num).getSuit()); 
 				mazoAux.remove(num);
@@ -117,13 +118,13 @@ public class Game {
 		
 		
 	}
-	
+	@SuppressWarnings("unchecked")
 	public void porcentajesTURN() {
 		for(int i = 0; i < BUCLE; i++) { 
-			List<Card> boardAux = board;
-			List<Card> mazoAux = mazo;
+			ArrayList<Card> boardAux = (ArrayList<Card>) board.clone();			
+			ArrayList<Card> mazoAux = (ArrayList<Card>) mazo.clone();
 			
-			// AÑADE UNA CARTA AL TABLERO AUXILIAR
+			// AÃ‘ADE UNA CARTA AL TABLERO AUXILIAR
 			int num = rand.nextInt(mazoAux.size());
 			Card c = new Card(mazoAux.get(num).getValue(), mazoAux.get(num).getSuit()); 
 			mazoAux.remove(num);
