@@ -33,7 +33,7 @@ public class Game {
 		switch(paso) {
 			case 0: 
 				// PREFLOP: REPARTIR LAS 2 CARTAS A LOS JUGADORES
-				repartir();				
+				repartir();	
 				porcentajesPREFLOP();				
 				break;
 			case 1: 
@@ -73,7 +73,7 @@ public class Game {
 				boardAux.add(c);
 			}
 			
-			// FUNCION QUE COMPRUEBA QEEN GANA DE LOS 5 JUGADORES
+			// FUNCION QUE COMPRUEBA QUIEN GANA DE LOS 5 JUGADORES
 			int ganador = ganaJugador(boardAux); // DEVUELVE LA POSICION DEL JUGADOR EN EL ARRAY PARA SUMARLO ALARRAY DE PUNTOS
 			puntosJug[ganador]++;
 		}		
@@ -88,6 +88,8 @@ public class Game {
 		
 		return ret;
 	}
+	
+	
 	
 	public void porcentajes() {
 		for (int i = 0; i < 6; i++) {
