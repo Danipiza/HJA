@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import launcher.Player;
-
 public class Game {
 	
 	private static final String cardValue[] =  {"2","3","4","5","6","7","8","9","10","jack","queen", "king","ace"}; 
@@ -76,16 +74,19 @@ public class Game {
 			}
 			
 			// FUNCION QUE COMPRUEBA QUIEN GANA DE LOS 5 JUGADORES
-			int ganador = ganaJugador(boardAux); // DEVUELVE LA POSICION DEL JUGADOR EN EL ARRAY PARA SUMARLO ALARRAY DE PUNTOS
-			puntosJug[ganador]++;
+			List<Integer> ganadores = ganaJugador(boardAux); // DEVUELVE LOS INDICES DE LOS JUGADORES EN EL ARRAY PARA SUMARLO AL ARRAY DE PUNTOS
+			double porcionPuntos = 1 / ganadores.size();
+			for(Integer punto : ganadores) {
+				puntosJug[punto] += porcionPuntos; //SE LE SUMA A CADA JUGADOR QUE HA EMPATADO SU PORCION DE PUNTOS
+			}			
 		}		
 		
 		porcentajes(); // FUNCION QUE DIVIDE LOS PUNTOS DE CADA JUGADOR Y LAS 2 MILLONES DE ITERACIONES
 	}	
 	
 	// FUNCION QUE CALCULA QUIEN GANA DADO UN TABLERO QUE PUEDE CAMBIAR Y LAS CARTAS DE CADA JUGADOR SON CONSTANTES
-	public int ganaJugador(List<Card> boardAux) {
-		int ret = 0;		
+	public List<Integer> ganaJugador(List<Card> boardAux) {
+		List<Integer> ret = new ArrayList<Integer>(); //LISTA CON LOS INDICES DE LOS JUGADORES GANADORES
 		for (int i = 0; i < players.size(); i++) {
 			players.get(i).CardsValue();
 		}
@@ -95,10 +96,13 @@ public class Game {
 			int c = compare(aux,players.get(i));
 			if (c == 1) {
 				aux = players.get(i);
+				ret.clear(); //HAY NUEVA MEJOR MANO, SE BORRAN TODAS LAS QUE HABIA Y SE AÑADE ESTE JUGADOR
+				ret.add(i);
 			}
-			//TODO EMPATE
+			else if(c == 0) {
+				ret.add(i); //SE AÑADE UN EMPATE
+			}
 		}
-		
 		
 		return ret;
 	}
