@@ -17,11 +17,18 @@ public class Player {
 	private int tieBreaker1;
 	private int tieBreaker2;
 	private String bestHand;
+	private boolean hasCards;
 	
 	public Player(Card _c1, Card _c2) {
-		active = true;
-		c1 = _c1;
-		c2 = _c2;
+		if(_c1 == null && _c2 == null)
+			hasCards = false;
+		else {
+			active = true;
+			c1 = _c1;
+			c2 = _c2;
+			hasCards = true;
+		}
+		
 	}
 	
 	public void handValue(List<Card> hand) {
@@ -204,6 +211,10 @@ public class Player {
 	
 	public boolean isActive() {
 		return active;
+	}
+	
+	public boolean getHasCards() {
+		return hasCards;
 	}
 	
 	public void fold() {

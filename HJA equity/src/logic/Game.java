@@ -1,8 +1,10 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+
 
 public class Game {
 	
@@ -25,28 +27,36 @@ public class Game {
 		players = new ArrayList<Player>();
 		activePlayers = 6;
 		rand = new Random();
-		board = new ArrayList<Card>();	
+		board = new ArrayList<Card>();
+		for(int i = 0; i < 6; i++) {
+			Player p = new Player(null, null);
+			players.add(p);
+		}
 		initMazo();
-		repartir();
+		
 	}
 	
 	public void jugar() {
 		switch(paso) {
 			case 0: 
-				// PREFLOP: REPARTIR LAS 2 CARTAS A LOS JUGADORES
-				porcentajesPREFLOP();				
+				//AQUI SE SELECCIONAN LAS CARTAS DE CADA JUG
+				repartir();		
 				break;
 			case 1: 
+				// PREFLOP: REPARTIR LAS 2 CARTAS A LOS JUGADORES
+				porcentajesPREFLOP();	
+				break;
+			case 2: 
 				// FLOP: PONER 3 CARTAS EN EL TABLERO
 				flop();
 				porcentajesPOSTFLOP();				
-				break;
-			case 2: 
+				break;	
+			case 3: 
 				// TURN: PONER 1 CARTA EN EL TABLERO
 				addCardToBoard();
-				porcentajesTURN();				
+				porcentajesTURN();
 				break;
-			case 3: 
+			case 4: 
 				// RIVER: PONER 1 CARTA EN EL TABLERO
 				addCardToBoard();
 				ganador();				
@@ -71,19 +81,19 @@ public class Game {
 	}
 	
 	public void repartir() {
-		players.clear();
 		for (int i = 0; i < 6; i++) {
-			int num = rand.nextInt(mazo.size());
-			Card c1 = mazo.get(num); //Repartimos la primera carta
-			mazo.remove(num);
-			
-			num = rand.nextInt(mazo.size());
-			Card c2 = mazo.get(num); //Repartimos la segunda carta
-			mazo.remove(num);
-			
-			Player p = new Player(c1,c2);
-			players.add(p);
-			
+			if(!players.get(i).getHasCards()) {
+				int num = rand.nextInt(mazo.size());
+				Card c1 = mazo.get(num); //Repartimos la primera carta
+				mazo.remove(num);
+				
+				num = rand.nextInt(mazo.size());
+				Card c2 = mazo.get(num); //Repartimos la segunda carta
+				mazo.remove(num);
+				
+				Player p = new Player(c1, c2);
+				players.add(i, p);
+			}
 		}
 	}
 	
@@ -112,15 +122,12 @@ public class Game {
 		                    }
 			
 			
-			// FUNCION QUE DIVIDE LOS PUNTOS DE CADA JUGADOR Y LAS 658008 COMBINACIONES
-			for (int i = 0; i < 6; i++) {
-				porcentajesJug[i] = (puntosJug[i]/658008) * 100; // PORCENTAJE DE VICTORIAS DE CADA JUGADOR
-				puntosJug[i] = 0;
-			}
-		}		
-		
-			
-		
+		// FUNCION QUE DIVIDE LOS PUNTOS DE CADA JUGADOR Y LAS 658008 COMBINACIONES
+		for (int i = 0; i < 6; i++) {
+			porcentajesJug[i] = (puntosJug[i]/658008) * 100; // PORCENTAJE DE VICTORIAS DE CADA JUGADOR				puntosJug[i] = 0;
+		}
+	}	
+	
 	private void flop() {
 		board.clear();
 		for (int i = 0; i < 3; i++) {
@@ -215,11 +222,11 @@ public class Game {
 				int comp = compare(aux,players.get(i));
 				if (comp == 1) {
 					aux = players.get(i);
-					ret.clear(); //HAY NUEVA MEJOR MANO, SE BORRAN TODAS LAS QUE HABIA Y SE AÑADE ESTE JUGADOR
+					ret.clear(); //HAY NUEVA MEJOR MANO, SE BORRAN TODAS LAS QUE HABIA Y SE Aï¿½ADE ESTE JUGADOR
 					ret.add(i);
 				}
 				else if(comp == 0) {
-					ret.add(i); //SE AÑADE UN EMPATE
+					ret.add(i); //SE Aï¿½ADE UN EMPATE
 				}
 			}
 		}
@@ -229,6 +236,24 @@ public class Game {
 		}
 		
 		return ret;
+	}
+	
+	public void inputCards(HashMap<Integer, Pair<Card, Card>> inputs) { 
+		for(Integer clave: inputs.keySet()) {
+			Player p = new Player(inputs.get(clave).getFirst(), inputs.get(clave).getSecond());
+			players.add(clave, p);
+			mazo.remove(inputs.get(clave).getFirst());
+			mazo.remove(inputs.get(clave).getSecond());
+		}
+	}
+	
+	public Card lookForCard(char symbolN, char symbolS) {
+		for(Card c: mazo) {
+			if(c.sameCard(symbolN, symbolS)) {
+				return c;
+			}
+		}
+		return null;
 	}
 
 	

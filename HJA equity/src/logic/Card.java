@@ -42,6 +42,12 @@ public class Card {
 	public int getValue() {
 		return value;
 	}
+	
+	public boolean sameCard(char symbolNAux, char symbolSAux) {
+		if(symbolNAux == this.symbolN && symbolSAux == this.symbolS)
+			return true;
+		return false;
+	}
 
 
 	public String toString() {
