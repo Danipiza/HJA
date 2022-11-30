@@ -28,9 +28,13 @@ public class Game {
 		activePlayers = 6;
 		rand = new Random();
 		board = new ArrayList<Card>();
-		for(int i = 0; i < 6; i++) {
+		for(int i = 0; i < 6; i++) { //INICIALIZAR JUGADORES
 			Player p = new Player(null, null);
 			players.add(p);
+		}
+		for(int i = 0; i < 5; i++) { //INICIALIZAR BOARD
+			Card c = new Card("", ' ', "", ' ', -1);
+			board.add(c);
 		}
 		initMazo();
 		
@@ -39,29 +43,26 @@ public class Game {
 	public void jugar() {
 		switch(paso) {
 			case 0: 
-				//AQUI SE SELECCIONAN LAS CARTAS DE CADA JUG
-				repartir();		
-				break;
-			case 1: 
 				// PREFLOP: REPARTIR LAS 2 CARTAS A LOS JUGADORES
+				repartir();
 				porcentajesPREFLOP();	
 				break;
-			case 2: 
+			case 1: 
 				// FLOP: PONER 3 CARTAS EN EL TABLERO
 				flop();
 				porcentajesPOSTFLOP();				
-				break;	
-			case 3: 
+				break;
+			case 2: 
 				// TURN: PONER 1 CARTA EN EL TABLERO
-				addCardToBoard();
+				addCardToBoard(3);
 				porcentajesTURN();
 				break;
-			case 4: 
+			case 3: 
 				// RIVER: PONER 1 CARTA EN EL TABLERO
-				addCardToBoard();
+				addCardToBoard(4);
 				ganador();				
 				break;
-			default: 				
+			default: //do nothing			
 			break;
 		}
 		
@@ -92,9 +93,11 @@ public class Game {
 				mazo.remove(num);
 				
 				Player p = new Player(c1, c2);
+				players.remove(i);
 				players.add(i, p);
 			}
 		}
+		
 	}
 	
 	public void porcentajesPREFLOP() {			
@@ -125,13 +128,13 @@ public class Game {
 		// FUNCION QUE DIVIDE LOS PUNTOS DE CADA JUGADOR Y LAS 658008 COMBINACIONES
 		for (int i = 0; i < 6; i++) {
 			porcentajesJug[i] = (puntosJug[i]/658008) * 100; // PORCENTAJE DE VICTORIAS DE CADA JUGADOR				puntosJug[i] = 0;
+			puntosJug[i] = 0;
 		}
 	}	
 	
 	private void flop() {
-		board.clear();
 		for (int i = 0; i < 3; i++) {
-			addCardToBoard();			
+			addCardToBoard(i);		
 		}		
 	}	
 	
@@ -160,12 +163,18 @@ public class Game {
 			}
 	}
 	
-	private void addCardToBoard() {
-		int num = rand.nextInt(mazo.size());
-		Card c = mazo.get(num); 
-		mazo.remove(num);
-		
-		board.add(c);
+	private void addCardToBoard(int index) {
+		if(!board.get(index).getRealCard()) {
+			board.remove(index);
+			int num = rand.nextInt(mazo.size());
+			Card c = mazo.get(num); 
+			mazo.remove(num);
+			
+			board.add(index, c);
+		}
+		else {
+			mazo.remove(board.get(index));
+		}
 	}
 	
 	public void porcentajesTURN() {
@@ -241,9 +250,18 @@ public class Game {
 	public void inputCards(HashMap<Integer, Pair<Card, Card>> inputs) { 
 		for(Integer clave: inputs.keySet()) {
 			Player p = new Player(inputs.get(clave).getFirst(), inputs.get(clave).getSecond());
+			players.remove((int) clave);
 			players.add(clave, p);
 			mazo.remove(inputs.get(clave).getFirst());
 			mazo.remove(inputs.get(clave).getSecond());
+		}
+	}
+	
+	public void inputBoard(HashMap<Integer, Card> inputs) {
+		for(Integer clave: inputs.keySet()) {
+			board.remove((int) clave);
+			board.add(clave, inputs.get(clave));
+			
 		}
 	}
 	
@@ -265,6 +283,7 @@ public class Game {
 		players.get(player).fold();
 		activePlayers--;
 		
+		
 		switch(paso) {
 		case 1: 
 			porcentajesPREFLOP();				
@@ -281,6 +300,8 @@ public class Game {
 		default: 				
 		break;
 	}
+	
+	
 		
 	}
 	

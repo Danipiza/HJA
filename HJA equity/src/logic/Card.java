@@ -10,19 +10,28 @@ public class Card {
 	private String suit;
 	private char symbolS;
 	private int value;
+	private boolean realCard;
 
 	
 	public Card(String cN, char sym, String sN, char s, int v) {
-		this.name = cN;
-		this.symbolN = Character.toUpperCase(sym);
-		if (symbolN == '1') symbolN = 'T';
-		this.suit = sN;
-		this.symbolS = s;
-		this.value = v;
+		if(v == -1) {
+			realCard = false;
+		} else {
+			realCard = true;
+			this.name = cN;
+			this.symbolN = Character.toUpperCase(sym);
+			if (symbolN == '1') symbolN = 'T';
+			this.suit = sN;
+			this.symbolS = s;
+			this.value = v;
+		}
 		
 	}
 	
-		
+	public boolean getRealCard() {
+		return realCard;
+	}
+	
 	public String getName() {
 		return name;
 	}

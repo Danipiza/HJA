@@ -39,7 +39,20 @@ public class MainWindow extends JFrame {
 	JTextField inputJug5;
 	JLabel input6Label;
 	JTextField inputJug6;
-	boolean preflop;
+	int preflop;
+	JButton fold1;
+	JButton fold2;
+	JButton fold3;
+	JButton fold4;
+	JButton fold5;
+	JButton fold6;
+	JLabel inputBoardLabel;
+	JTextField boardInput1;
+	JTextField boardInput2;
+	JTextField boardInput3;
+	JTextField boardInput4;
+	JTextField boardInput5;
+	
 	
 	public MainWindow(Game g) {
 		game = g;
@@ -51,9 +64,10 @@ public class MainWindow extends JFrame {
 		cartas1 = new ArrayList<JLabel>();
 		cartas2 = new ArrayList<JLabel>();
 		porcentajes = new ArrayList<JLabel>();
-		preflop = true;
+		preflop = 0;
 		
 		initBotones();
+		showFolds(false);
 		add(tablero);
 		setSize(1400,970); 
 		setVisible(true);
@@ -68,6 +82,7 @@ public class MainWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setInputs();
+				setBoardInputs();
 				input.setVisible(false);
 			}
 		});
@@ -79,24 +94,38 @@ public class MainWindow extends JFrame {
 		sig.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(preflop) {
+				if(preflop == 0) {
 					hideLabels();
+					hideBoardLabels();
+					showFolds(true);
 					input.setVisible(false);
 				}				
 				game.jugar();
-				if(preflop) {
+				switch(preflop) {
+				case 0: //PREFLOP
 					pintarJugadores();
-					setPreflop(false);
-				} else
-					pintarPorcentajes();
-				pintarCartasTablero();
+					break;
+				case 1: //FLOP
+					pintarBoardFlop();
+					break;
+				case 2: //TURN
+					pintarCarta(3);
+					break;
+				case 3: //RIVER
+					pintarCarta(4);
+					break;
+				}
+				pintarPorcentajes();
+				nextStep();
 			}
 		});
 		tablero.add(sig);
 		
-		showInputs();		
+		showInputs();
 		
-		JButton fold1 = new JButton("Fold");
+		showBoardInputs();
+		
+		fold1 = new JButton("Fold");
 		fold1.setBounds(425, 270, 90, 30);
 		fold1.addActionListener(new ActionListener() {
 			@Override
@@ -111,7 +140,7 @@ public class MainWindow extends JFrame {
 		});
 		tablero.add(fold1);
 		
-		JButton fold2 = new JButton("Fold");
+		fold2 = new JButton("Fold");
 		fold2.setBounds(905, 275, 90, 30);
 		fold2.addActionListener(new ActionListener() {
 			@Override
@@ -123,10 +152,10 @@ public class MainWindow extends JFrame {
 					pintarPorcentajes();
 				}
 			}
-		});
+		}); 
 		tablero.add(fold2);
 		
-		JButton fold3 = new JButton("Fold");
+		fold3 = new JButton("Fold");
 		fold3.setBounds(1210, 534, 90, 30);
 		fold3.addActionListener(new ActionListener() {
 			@Override
@@ -138,11 +167,11 @@ public class MainWindow extends JFrame {
 					pintarPorcentajes();
 				}
 			}
-		});
+		});   
 		tablero.add(fold3);
 		
-		JButton fold4 = new JButton("Fold");
-		fold4.setBounds(905, 625, 90, 30);
+		fold4 = new JButton("Fold");
+		fold4.setBounds(905, 655, 90, 30);
 		fold4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -156,8 +185,8 @@ public class MainWindow extends JFrame {
 		});
 		tablero.add(fold4);
 		
-		JButton fold5 = new JButton("Fold");
-		fold5.setBounds(425, 625, 90, 30);
+		fold5 = new JButton("Fold");
+		fold5.setBounds(425, 655, 90, 30);
 		fold5.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -171,7 +200,8 @@ public class MainWindow extends JFrame {
 		});
 		tablero.add(fold5);
 		
-		JButton fold6 = new JButton("Fold");
+		
+		fold6 = new JButton("Fold");
 		fold6.setBounds(155, 546, 90, 30);
 		fold6.addActionListener(new ActionListener() {
 			@Override
@@ -183,63 +213,155 @@ public class MainWindow extends JFrame {
 					pintarPorcentajes();
 				}
 			}
-		});
+		});  
 		tablero.add(fold6);
 	}
 	
-	private void setPreflop(boolean b) {
-		preflop = b;
+	private void nextStep() {
+		preflop++;
+	}
+	
+	private void showFolds(boolean b) {
+		fold1.setVisible(b);
+		fold2.setVisible(b);
+		fold3.setVisible(b);
+		fold4.setVisible(b);
+		fold5.setVisible(b);
+		fold6.setVisible(b);
+	}
+	
+	private void showBoardInputs() {
+		inputBoardLabel = new JLabel("Introduzca las cartas del board:");
+		tablero.add(inputBoardLabel);
+		inputBoardLabel.setBounds(410, 460, 180, 30);
+		inputBoardLabel.setOpaque(true);
+		
+		boardInput1 = new JTextField(); 
+		tablero.add(boardInput1);
+		boardInput1.setBounds(590, 460, 40, 30);
+		
+		boardInput2 = new JTextField(); 
+		tablero.add(boardInput2);
+		boardInput2.setBounds(630, 460, 40, 30);
+		
+		boardInput3 = new JTextField(); 
+		tablero.add(boardInput3);
+		boardInput3.setBounds(670, 460, 40, 30);
+		
+		boardInput4 = new JTextField(); 
+		tablero.add(boardInput4);
+		boardInput4.setBounds(710, 460, 40, 30);
+		
+		boardInput5 = new JTextField(); 
+		tablero.add(boardInput5);
+		boardInput5.setBounds(750, 460, 40, 30);
 	}
 	
 	private void showInputs() {
 		//P1
 		input1Label = new JLabel("Introduzca las cartas:");
 		tablero.add(input1Label);
-		input1Label.setBounds(300, 300, 125, 30);
+		input1Label.setBounds(345, 270, 125, 30);
 		input1Label.setOpaque(true);
 		inputJug1 = new JTextField(); 
 		tablero.add(inputJug1);
-		inputJug1.setBounds(425, 300, 90, 30);
+		inputJug1.setBounds(470, 270, 90, 30);
 		//P2 
 		input2Label = new JLabel("Introduzca las cartas:");
 		tablero.add(input2Label);
-		input2Label.setBounds(780, 300, 125, 30);
+		input2Label.setBounds(825, 275, 125, 30);
 		input2Label.setOpaque(true);
 		inputJug2 = new JTextField(); 
 		tablero.add(inputJug2);
-		inputJug2.setBounds(905, 300, 90, 30);
+		inputJug2.setBounds(950, 275, 90, 30);
 		//P3
 		input3Label = new JLabel("Introduzca las cartas:");
 		tablero.add(input3Label);
-		input3Label.setBounds(1085, 564, 125, 30);
+		input3Label.setBounds(1130, 534, 125, 30);
 		input3Label.setOpaque(true);
 		inputJug3 = new JTextField(); 
 		tablero.add(inputJug3);
-		inputJug3.setBounds(1210, 564, 90, 30);
-		//P4 
+		inputJug3.setBounds(1255, 534, 90, 30);
+		//P4       
 		input4Label = new JLabel("Introduzca las cartas:");
 		tablero.add(input4Label);
-		input4Label.setBounds(780, 655, 125, 30);
+		input4Label.setBounds(825, 655, 125, 30);
 		input4Label.setOpaque(true);
 		inputJug4 = new JTextField(); 
 		tablero.add(inputJug4);
-		inputJug4.setBounds(905, 655, 90, 30);	
+		inputJug4.setBounds(950, 655, 90, 30);	
 		//P5
 		input5Label = new JLabel("Introduzca las cartas:");
 		tablero.add(input5Label);
-		input5Label.setBounds(300, 655, 125, 30);
+		input5Label.setBounds(345, 655, 125, 30);
 		input5Label.setOpaque(true);
 		inputJug5 = new JTextField(); 
 		tablero.add(inputJug5);
-		inputJug5.setBounds(425, 655, 90, 30);
+		inputJug5.setBounds(470, 655, 90, 30);
 		//P6 
 		input6Label = new JLabel("Introduzca las cartas:");
 		tablero.add(input6Label);
-		input6Label.setBounds(30, 576, 125, 30);
+		input6Label.setBounds(75, 546, 125, 30);
 		input6Label.setOpaque(true);
 		inputJug6 = new JTextField(); 
 		tablero.add(inputJug6);
-		inputJug6.setBounds(155, 576, 90, 30);
+		inputJug6.setBounds(200, 546, 90, 30);
+	} 
+	
+	private void setBoardInputs() {
+		HashMap<Integer, Card> inputs = new HashMap <Integer, Card>();
+		String input;
+		
+		//Card 1
+		try { //SI HAY ALGO ESCRITO EN EL JTextField...
+			input = boardInput1.getText(); //i = c1,c2
+			inputs.put(0, getCardFromDeck(input));
+		} catch(Exception e) {
+			//do Nothing
+		}
+		
+		//Card 2
+		try { //SI HAY ALGO ESCRITO EN EL JTextField...
+			input = boardInput2.getText(); //i = c1,c2
+			inputs.put(1, getCardFromDeck(input));
+		} catch(Exception e) {
+			//do Nothing
+		}
+		
+		//Card 3
+		try { //SI HAY ALGO ESCRITO EN EL JTextField...
+			input = boardInput3.getText(); //i = c1,c2
+			inputs.put(2, getCardFromDeck(input));
+		} catch(Exception e) {
+			//do Nothing
+		}
+		
+		//Card 4
+		try { //SI HAY ALGO ESCRITO EN EL JTextField...
+			input = boardInput4.getText(); //i = c1,c2
+			inputs.put(3, getCardFromDeck(input));
+		} catch(Exception e) {
+			//do Nothing
+		}
+		
+		//Card 5
+		try { //SI HAY ALGO ESCRITO EN EL JTextField...
+			input = boardInput5.getText(); //i = c1,c2
+			inputs.put(4, getCardFromDeck(input));
+		} catch(Exception e) {
+			//do Nothing
+		}
+		game.inputBoard(inputs);
+		hideBoardLabels();
+	}
+	
+	private void hideBoardLabels() {
+		inputBoardLabel.setVisible(false);
+		boardInput1.setVisible(false);
+		boardInput2.setVisible(false);
+		boardInput3.setVisible(false);
+		boardInput4.setVisible(false);
+		boardInput5.setVisible(false);
 	}
 	
 	private void setInputs() {
@@ -433,16 +555,23 @@ public class MainWindow extends JFrame {
 		
 	}
 	
-	private void pintarCartasTablero() {
+	private void pintarBoardFlop() {
 		List<Card> board = game.getCartasBoard();
 		int posX = 490;
-		for (Card card : board) {
-			JLabel carta = card.toImage();
+		for(int i = 0; i < 3; i++) {
+			JLabel carta = board.get(i).toImage();
 			tablero.add(carta);
 			carta.setBounds(posX, 400, 75, 110);
 			posX += 80;
 		}
-		
+	}
+	
+	private void pintarCarta(int index) {
+		List<Card> board = game.getCartasBoard();
+		int posX = 490 + (index*80);
+		JLabel carta = board.get(index).toImage();
+		tablero.add(carta);
+		carta.setBounds(posX, 400, 75, 110);
 	}
 	
 	public void pintarPorcentajes() {
